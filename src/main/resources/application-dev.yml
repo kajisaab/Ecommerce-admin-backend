@@ -1,0 +1,17 @@
+#Database
+DB_HOST: localhost
+DB_PORT: 3306
+DB_USER: root
+DB_PASSWORD: "@m@nKh@dk@12"
+DB_DATABASE: ecommerce
+
+#Server
+SERVER_PORT: 8080
+ACTIVE_PROFILE: dev
+
+#Email
+EMAIL_HOST : smtp.gmail.com
+USER_EMAIL : amankhadkakaji@gmail.com
+USER_PASSWORD : cdteljwtympxzpqt
+EMAIL_PORT: 587
+VERIFY_EMAIL_HOST: http://localhost:${SERVER_PORT}}
