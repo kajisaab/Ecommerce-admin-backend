@@ -33,7 +33,7 @@ public class SignupUsecase {
     public SignupResponse register(SignupUsecaseRequest request){
         boolean isUserAlreadyRegistered = isNewUser(request.getEmail());
         if(!isUserAlreadyRegistered){
-            var user = User.builder().first_name(request.getFirstName()).last_name(request.getLastName()).email(request.getEmail()).user_name(request.getUserName()).role(Role.USER).build();
+            var user = User.builder().firstName(request.getFirstName()).lastName(request.getLastName()).email(request.getEmail()).userName(request.getUserName()).role(Role.USER).build();
             User savedUser = userDetailsRepository.save(user);
 
             UserCredential userCredential = new UserCredential();

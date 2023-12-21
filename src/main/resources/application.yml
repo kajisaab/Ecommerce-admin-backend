@@ -2,6 +2,7 @@ spring:
   profiles:
     active: ${ACTIVE_PROFILE:dev}
 
+
   datasource:
     url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_DATABASE}
     username: ${DB_USER}

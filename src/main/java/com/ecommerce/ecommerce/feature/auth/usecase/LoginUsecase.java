@@ -31,6 +31,7 @@ public class LoginUsecase {
     public SigninResponse authenticate(SigninUsecaseRequest request) {
         Optional<User> userDetails = userDetailsRepository.findByEmail(request.getEmail());
         AtomicReference<String> jwtToken = new AtomicReference<>("");
+        System.out.println("This is the user Details ===========+>"+ userDetails);
 
         if (userDetails.isPresent()) {
             User user = userDetails.get();
@@ -48,7 +49,7 @@ public class LoginUsecase {
                 throw new BadRequestException("Invalid Credentials ");
             }
 
-            if(userCredential !=null && !user.is_active()){
+            if(userCredential !=null && !user.isActive()){
                 throw new BadRequestException("User is disabled");
             }
 

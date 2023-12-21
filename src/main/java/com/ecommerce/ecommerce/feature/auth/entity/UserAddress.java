@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Entity()
 @AllArgsConstructor()
 @EntityListeners(AutoCloseable.class)
-@Table(name = "user_address")
+@Table(name = "userAddress")
 public class UserAddress {
 
     @Id
@@ -20,10 +20,10 @@ public class UserAddress {
     private String id;
 
     @Column(nullable = true)
-    private String complete_address;
+    private String completeAddress;
 
     @Column(nullable = true)
-    private String phone_number;
+    private String phoneNumber;
 
     @OneToOne()
     @JoinColumn(name = "user_id")
@@ -33,8 +33,8 @@ public class UserAddress {
     public String toString() {
         return "UserAddress{" +
                 "id='" + id + '\'' +
-                ", complete_address='" + complete_address + '\'' +
-                ", phone_number='" + phone_number + '\'' +
+                ", complete_address='" + completeAddress + '\'' +
+                ", phone_number='" + phoneNumber + '\'' +
                 ", userDetails=" + (userDetails != null ? userDetails.getId() : "null") +
                 '}';
     }

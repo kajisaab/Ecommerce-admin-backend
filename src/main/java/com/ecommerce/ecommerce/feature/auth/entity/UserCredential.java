@@ -28,16 +28,16 @@ public class UserCredential {
     private String password;
 
     @Column(nullable = false, columnDefinition = "int default 5")
-    private int max_login_attempts;
+    private int maxLoginAttempts;
 
     @Column(nullable = false, columnDefinition = "int default 0")
-    private int login_attempts;
+    private int loginAttempts;
 
     @Column()
     private String passwordHistory;
 
     @Column(columnDefinition = "TINYINT(1) default 0")
-    private boolean is_deleted;
+    private boolean isDeleted;
 
     @OneToOne()
     @JoinColumn(name = "user_id")
@@ -47,24 +47,24 @@ public class UserCredential {
     private OtpSetting otpSetting;
 
     @CreatedDate
-    private LocalDateTime created_At;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
-    private LocalDateTime updated_At;
+    private LocalDateTime updatedAt;
 
     @Override
     public String toString() {
         return "UserCredential{" +
                 "id='" + id + '\'' +
                 ", password='" + password + '\'' +
-                ", max_login_attempts=" + max_login_attempts +
-                ", login_attempts=" + login_attempts +
+                ", max_login_attempts=" + maxLoginAttempts +
+                ", login_attempts=" + loginAttempts +
                 ", passwordHistory='" + passwordHistory + '\'' +
-                ", is_deleted=" + is_deleted +
+                ", is_deleted=" + isDeleted +
                 ", userDetails=" + (userDetails != null ? userDetails.getId() : "null") +
                 ", otpSetting=" + otpSetting +
-                ", created_At=" + created_At +
-                ", updated_At=" + updated_At +
+                ", created_At=" + createdAt +
+                ", updated_At=" + updatedAt +
                 '}';
     }
 }

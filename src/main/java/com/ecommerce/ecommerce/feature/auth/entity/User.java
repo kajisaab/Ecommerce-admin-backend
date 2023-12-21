@@ -30,25 +30,25 @@ public class User implements UserDetails {
     private String id;
 
     @Column(nullable = false)
-    private String first_name;
+    private String firstName;
 
     @Column(nullable = false)
-    private String last_name;
+    private String lastName;
 
     @Column(nullable = false)
     private String email;
 
     @Column(nullable = false)
-    private String user_name;
+    private String userName;
 
     @Column(nullable = false, columnDefinition = "TINYINT(1) default 0")
-    private boolean is_deleted;
+    private boolean isDeleted;
 
     @Column(nullable = false, columnDefinition = "TINYINT(1) default 0")
-    private boolean is_blocked;
+    private boolean isBlocked;
 
     @Column(nullable = false, columnDefinition = "TINYINT(1) default 0")
-    private boolean is_active;
+    private boolean isActive;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -57,10 +57,10 @@ public class User implements UserDetails {
     private UserCredential userCredential;
 
     @CreatedDate
-    private LocalDateTime created_At;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
-    private LocalDateTime updated_At;
+    private LocalDateTime updatedAt;
 
 
     @Override

@@ -17,12 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final SignupUsecase signupUsecase;
     private final LoginUsecase loginUsecase;
-    private final OtpVerificationUsecase otpVerificationUsecase;
 
     @PostMapping("/register")
     public ResponseEntity<Object>register(@RequestBody SignupUsecaseRequest request) throws BadRequestException {
@@ -31,11 +30,7 @@ public class AuthenticationController {
 
     @PostMapping("/signin")
     public ResponseEntity<Object>authenticate(@RequestBody SigninUsecaseRequest request) throws BadRequestException{
+        System.out.println("This is signin block");
         return ResponseHandler.responseBuilder("SUCCESS", HttpStatus.OK, loginUsecase.authenticate(request));
-    }
-
-    @PostMapping("/verify-otp")
-    public ResponseEntity<Object>verifyOtp(@RequestBody OtpVerificationUsecaseRequestDto request) throws BadRequestException{
-        return ResponseHandler.responseBuilder("SUCCESS", HttpStatus.OK, otpVerificationUsecase.otpVerification(request));
     }
 }
