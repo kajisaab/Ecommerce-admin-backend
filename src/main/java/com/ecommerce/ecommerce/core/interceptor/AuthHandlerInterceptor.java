@@ -1,26 +1,47 @@
 package com.ecommerce.ecommerce.core.interceptor;
 
+import com.ecommerce.ecommerce.core.jwt.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 @Slf4j
 public class AuthHandlerInterceptor implements HandlerInterceptor {
+    private final JwtService jwtService;
+    private final UserDetailsService userDetailsService;
+
+    public AuthHandlerInterceptor(JwtService jwtService, UserDetailsService userDetailsService) {
+        this.jwtService = jwtService;
+        this.userDetailsService = userDetailsService;
+    }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        response.setHeader("This is the new response header", "Custom-Value");
-        // Get a specific request header
-        String customHeader = request.getHeader("Custom-Header");
+        final String jwt;
+        final String userEmail;
+        final String authHeader  = request.getHeader("X-XSRF-TOKEN");
+        AtomicReference<String> jwtToken = new AtomicReference<>("");
+        if(authHeader != null) {
+            jwt = authHeader;
+            userEmail = jwtService.extractUserEmail(jwt); // todo extract the userEmail from JWT token;
+            if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null){
+                UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
 
-        if (customHeader != null) {
-            // Use the value of the custom header
-            System.out.println("Custom-Header Value: " + customHeader);
-        } else {
-            System.out.println("Custom-Header is not present in the request.");
+                if(jwtService.isTokenValid(jwt, userDetails)) {
+                    jwtToken.set(jwtService.generateToken(userDetails));
+                    response.setHeader("X-XSRF-TOKEN", jwtToken.get());
+                }
+            }
         }
         // update the token and send the token to the response from here.
         return true;
@@ -33,5 +54,4 @@ public class AuthHandlerInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable Exception ex) throws Exception {
     }
-
 }

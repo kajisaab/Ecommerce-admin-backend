@@ -10,6 +10,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserCredentialRepository extends JpaRepository<UserCredential, String> {
-    @Query(value = "SELECT uc FROM UserCredential uc WHERE uc.userDetails.id = :userId",nativeQuery = true)
+    @Query(value = "SELECT * from user_credential WHERE id = :userId",nativeQuery = true)
     List<UserCredential> findByUserId(@Param("userId") String userId);
 }

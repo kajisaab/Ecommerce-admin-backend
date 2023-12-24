@@ -18,9 +18,6 @@ public class OtpService {
         DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
         String expiryTime = currentTime.format(formatter);
 
-        System.out.println("This is the expiryTime ==========> " + expiryTime);
-
-
         int otpCode = random.nextInt((999999 - 100000) + 100000);
         return GenerateOtpCodeDto.builder().otpCode(otpCode).expiryTime(expiryTime).build();
     };

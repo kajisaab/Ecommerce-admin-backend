@@ -1,6 +1,7 @@
 package com.ecommerce.ecommerce.feature.auth.entity;
 
 import com.ecommerce.ecommerce.feature.auth.enumConstant.Role;
+import com.ecommerce.ecommerce.feature.auth.enumConstant.UserTypeEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -52,6 +53,9 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Enumerated(EnumType.STRING)
+    private UserTypeEnum userType;
 
     @OneToOne(mappedBy = "userDetails", cascade = CascadeType.ALL)
     private UserCredential userCredential;

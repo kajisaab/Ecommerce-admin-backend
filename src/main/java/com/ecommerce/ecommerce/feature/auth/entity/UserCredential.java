@@ -1,5 +1,6 @@
 package com.ecommerce.ecommerce.feature.auth.entity;
 
+import com.ecommerce.ecommerce.common.DBEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,12 +18,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "userCredential")
-public class UserCredential {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+public class UserCredential extends DBEntity {
 
     @Column(nullable = false)
     private String password;
@@ -45,28 +41,6 @@ public class UserCredential {
 
     @OneToOne(mappedBy = "userCredential", cascade = CascadeType.ALL)
     private OtpSetting otpSetting;
-
-    @CreatedDate
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
-
-    @Override
-    public String toString() {
-        return "UserCredential{" +
-                "id='" + id + '\'' +
-                ", password='" + password + '\'' +
-                ", max_login_attempts=" + maxLoginAttempts +
-                ", login_attempts=" + loginAttempts +
-                ", passwordHistory='" + passwordHistory + '\'' +
-                ", is_deleted=" + isDeleted +
-                ", userDetails=" + (userDetails != null ? userDetails.getId() : "null") +
-                ", otpSetting=" + otpSetting +
-                ", created_At=" + createdAt +
-                ", updated_At=" + updatedAt +
-                '}';
-    }
 }
 
 

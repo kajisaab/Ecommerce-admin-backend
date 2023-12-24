@@ -35,9 +35,8 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("*").permitAll()
                         .requestMatchers("/api/product/save", "/api/product/add-to-cart").authenticated()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 ).sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
@@ -56,3 +55,7 @@ public class SecurityConfiguration {
         return source;
     }
 }
+
+
+
+
