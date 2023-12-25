@@ -19,15 +19,15 @@ import java.util.Set;
 @Entity()
 public class ProductDetails extends DBEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "product_details_size", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "size_id"))
     private Set<Size> sizes = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "product_details_color", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "color_id"))
     private Set<Color> colors = new HashSet<>();
 

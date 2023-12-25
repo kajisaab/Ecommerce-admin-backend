@@ -41,6 +41,18 @@ public class UserCredential extends DBEntity {
 
     @OneToOne(mappedBy = "userCredential", cascade = CascadeType.ALL)
     private OtpSetting otpSetting;
+
+
+    @Override
+    public String toString() {
+        return "UserCredential{" +
+                ", password='" + password + '\'' +
+                ", max_login_attempts=" + maxLoginAttempts +
+                ", login_attempts=" + loginAttempts +
+                ", passwordHistory='" + passwordHistory + '\'' +
+                ", is_deleted=" + isDeleted +
+                '}';
+    }
 }
 
 
