@@ -1,7 +1,9 @@
 spring:
   profiles:
     active: ${ACTIVE_PROFILE:dev}
-
+  thymeleaf:
+    suffix: .html
+    prefix: classpath:/templates/
 
   datasource:
     url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_DATABASE}
@@ -43,10 +45,11 @@ spring:
 
 server:
   port: ${SERVER_PORT:8080}
-  servlet:
-    context-path: /v1/api
+#  servlet:
+#    context-path: /v1/api
 
 logging:
   level:
     org:
       springframework: DEBUG
+      thymeleaf: DEBUG
