@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.Customizer;
@@ -37,26 +38,44 @@ public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
 
-
+//    this is for the ssr
     @Bean
     public AuthenticationFailureHandler customAuthenticationFailureHandler() {
         return new CustomAuthenticationFailureHandler();
     }
+
+    // This is for the Rest API
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    @Order(1)
+    public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception{
         http
+                .securityMatcher("/v1/**")
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/product/save", "/api/product/add-to-cart").authenticated()
-                        .requestMatchers("/api/**", "/loginPage/**", "/public/css/**", "/public/js/**").permitAll()
+                        .anyRequest().permitAll()
+                )
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
+
+    // This is for the thymeleaf
+    @Bean
+    @Order(2)
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .requestMatchers("/css/**", "/js/**").permitAll()
                         .anyRequest().authenticated()
-                ).sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                )
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .formLogin(login -> login.loginPage("/loginPage").loginProcessingUrl("/loginPage/register/").failureHandler(customAuthenticationFailureHandler()).defaultSuccessUrl("/home/").permitAll())
-                .logout(logout -> logout.clearAuthentication(true).invalidateHttpSession(true).logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/loginPage/").permitAll());
+                .formLogin(login -> login.loginPage("/login").loginProcessingUrl("/login").failureHandler(customAuthenticationFailureHandler()).defaultSuccessUrl("/home").permitAll())
+                .logout(logout -> logout.clearAuthentication(true).invalidateHttpSession(true).logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login").permitAll());
         return http.build();
     }
 

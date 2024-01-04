@@ -42,16 +42,14 @@ public class SignupUsecase {
         }
         boolean isUserAlreadyRegistered = isNewUser(request.getEmail());
         if(!isUserAlreadyRegistered){
-            var user = User.builder().firstName(request.getFirstName()).lastName(request.getLastName()).email(request.getEmail()).userName(request.getUserName()).role(Role.USER).userType(UserTypeEnum.VENDOR).build();
+            var user = User.builder().firstName(request.getFirstName()).lastName(request.getLastName()).email(request.getEmail()).userName(request.getUserName()).role(Role.USER).userType(UserTypeEnum.VENDOR).password(passwordEncoder.encode((request.getPassword()))).build();
             User savedUser = userDetailsRepository.save(user);
 
             UserCredential userCredential = new UserCredential();
             userCredential.setUserDetails(savedUser);
-            userCredential.setPassword(passwordEncoder.encode((request.getPassword())));
             UserCredential savedCred = userCredentialRepository.save(userCredential);
 
             GenerateOtpCodeDto generatedOtp = this.otpService.getOtp();
-            System.out.println("This is the generatedOtp =============> " + generatedOtp.toString());
             var otpDetails = OtpSetting.builder().userCredential(savedCred).otp(generatedOtp.getOtpCode()).expiry_date_time(generatedOtp.getExpiryTime()).build();
             otpSettingRepository.save(otpDetails);
 //            emailService.sendHtmlEmail(generatedOtp.getOtpCode(), request.getEmail());

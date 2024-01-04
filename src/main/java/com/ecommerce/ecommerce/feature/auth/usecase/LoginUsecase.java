@@ -38,7 +38,6 @@ public class LoginUsecase {
         }
         Optional<User> userDetails = userDetailsRepository.findByEmail(request.getEmail());
         AtomicReference<String> jwtToken = new AtomicReference<>("");
-        System.out.println("This is the user Details ===========+>"+ userDetails);
 
         if (userDetails.isPresent()) {
             User user = userDetails.get();
@@ -52,7 +51,7 @@ public class LoginUsecase {
                 userCredential = userCredentialDetails.get(0);
             }
 
-            if (userCredential != null && !passwordEncoder.matches(request.getPassword(), userCredential.getPassword())) {
+            if (userCredential != null && !passwordEncoder.matches(request.getPassword(), user.getPassword())) {
                 throw new BadRequestException("Invalid Credentials ");
             }
 

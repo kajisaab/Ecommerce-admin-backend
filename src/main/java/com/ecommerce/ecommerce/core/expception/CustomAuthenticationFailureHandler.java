@@ -14,10 +14,12 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
         // Handle the authentication failure exception here
         // You can log the exception or add custom logic
 
+        System.out.println("This is the error " + exception.getMessage() );
+
         // For example, you can set an attribute with the error message
-        request.setAttribute("errorMessage", "Authentication failed: " + exception.getMessage());
+        request.setAttribute("error", "Authentication failed: " + exception.getMessage());
 
         // Redirect back to the login page with the error message
-        response.sendRedirect("/loginPage?error");
+        response.sendRedirect("/login?error");
     }
 }

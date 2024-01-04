@@ -20,9 +20,6 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class UserCredential extends DBEntity {
 
-    @Column(nullable = false)
-    private String password;
-
     @Column(nullable = false, columnDefinition = "int default 5")
     private int maxLoginAttempts;
 
@@ -46,7 +43,6 @@ public class UserCredential extends DBEntity {
     @Override
     public String toString() {
         return "UserCredential{" +
-                ", password='" + password + '\'' +
                 ", max_login_attempts=" + maxLoginAttempts +
                 ", login_attempts=" + loginAttempts +
                 ", passwordHistory='" + passwordHistory + '\'' +
