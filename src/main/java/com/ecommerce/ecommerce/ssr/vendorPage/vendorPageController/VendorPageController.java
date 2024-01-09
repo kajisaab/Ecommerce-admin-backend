@@ -1,0 +1,68 @@
+package com.ecommerce.ecommerce.ssr.vendorPage.vendorPageController;
+
+import com.ecommerce.ecommerce.feature.vendor.dto.VendorInfoProjection;
+import com.ecommerce.ecommerce.feature.vendor.entity.VendorInfo;
+import com.ecommerce.ecommerce.feature.vendor.repository.VendorDetailsRepository;
+import com.ecommerce.ecommerce.ssr.vendorPage.services.VendorListService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+@Controller
+@RequestMapping("/vendorPage")
+public class VendorPageController {
+
+    public VendorListService vendorListService;
+
+    @Autowired
+    public VendorPageController(VendorListService vendorListService){
+        this.vendorListService = vendorListService;
+    }
+
+    @GetMapping("")
+    public String getVendor(Model model){
+        model.addAttribute("pageTitle", "Vendor");
+
+//        to fetch the vendor card details on the page load
+        List<VendorInfoProjection> cardDetails = vendorListService.getVendorList();
+        if(cardDetails != null && !cardDetails.isEmpty()){
+            model.addAttribute("vendors", cardDetails);
+        }else {
+            model.addAttribute("vendors", new ArrayList<>());
+        }
+        System.out.println("This is the vendor list " + cardDetails );
+        return "vendorPage";
+    }
+
+    @GetMapping("/cards")
+    public ResponseEntity<List<VendorInfoProjection>> getCards(Model model, @RequestParam(name = "sort", defaultValue = "asc") String sortOrder) {
+        List<VendorInfoProjection> cardDetails = vendorListService.getVendorList();
+        if(cardDetails != null && !cardDetails.isEmpty()){
+            model.addAttribute("vendors", cardDetails);
+        }else {
+            model.addAttribute("vendors", new ArrayList<>());
+        }
+        System.out.println("This is the vendor list " + cardDetails );
+//        Optional<VendorInfoProjection> vendorDetails = VendorDetailsRepository.getAllVendor();
+
+//                // Sort the cards based on the provided sortOrder (asc or desc)
+//                cardList.sort((card1, card2) -> {
+//                    if ("asc".equals(sortOrder)) {
+//                        return card1.getName().compareTo(card2.getName());
+//                    } else {
+//                        return card2.getName().compareTo(card1.getName());
+//                    }
+//                });
+
+        return ResponseEntity.ok(cardDetails);
+//        model.addAttribute("cards", cardDetails);
+    }
+}

@@ -21,12 +21,13 @@ public class LoginController {
     public String getLogin(@RequestParam(name = "error", required = false) String error, Model model, HttpSession session){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (error != null) {
+            System.out.println("This is the error " + error);
             model.addAttribute("errorMessage", "Authentication failed: " + error);
         }
         if(authentication == null || authentication instanceof AnonymousAuthenticationToken) {
             return "login";
         }
 
-        return "redirect:/home";
+        return "redirect:/dashboardPage";
     }
 }

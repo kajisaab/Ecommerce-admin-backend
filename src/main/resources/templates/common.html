@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div class="sidebar close" th:fragment="sidebar">
+        <header>
+            <span>Shopme</span>
+            <i class="bx bx-chevron-right toggle"></i>
+        </header>
+
+        <div class="menu__bar">
+            <div class="menu">
+                <ul class="menu__links">
+                    <li id="dashboardMenuItem" class="nav__links">
+                        <a href="dashboardPage">
+                            <i class="bx bx-home-alt icon"></i>
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                        <span class="tooltip">Dashboard</span>
+                    </li>
+                    <li id="productMenuItem" class="nav__links">
+                        <a href="productPage">
+                            <i
+                                    class="bx bxs-shopping-bag bx-tada icon"
+                            ></i>
+                            <span class="text nav-text">Product</span>
+                        </a>
+                        <span class="tooltip">product</span>
+                    </li>
+                    <li id="categoriesMenuItem" class="nav__links">
+                        <a href="categoriesPage">
+                            <i class="bx bx-category-alt icon"></i>
+                            <span class="text nav-text"
+                            >Categories</span
+                            >
+                        </a>
+                        <span class="tooltip">Categories</span>
+                    </li>
+                    <li id="orderMenuItem" class="nav__links">
+                        <a href="ordersPage">
+                            <i class="bx bxs-shopping-bags icon"></i>
+                            <span class="text nav-text">Orders</span>
+                        </a>
+                        <span class="tooltip">Orders</span>
+                    </li>
+                    <li id="usersMenuItem" class="nav__links">
+                        <a href="usersPage">
+                            <i class='bx bx-user-circle icon'></i>
+                            <span class="text nav-text">Users</span>
+                        </a>
+                        <span class="tooltip">Users</span>
+                    </li>
+                    <li id="vendorMenuItem" class="nav__links">
+                        <a href="vendorPage">
+                            <i class="bx bxs-store icon"></i>
+                            <span class="text nav-text">Vendor</span>
+                        </a>
+                        <span class="tooltip">Vendor</span>
+                    </li>
+                    <li id="transactionsMenuItem" class="nav__links">
+                        <a href="transactionsPage">
+                            <i class="bx bxs-dollar-circle icon"></i>
+                            <span class="text nav-text"
+                            >Transactions</span
+                            >
+                        </a>
+                        <span class="tooltip">Transactions</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="header__wrapper" th:fragment="header_container">
+        <span>[[${pageTitle}]]</span>
+            <div class="header__right__container">
+                <i class="bx bx-user-circle header__icon"
+                   onclick="openUserIconMenu()"
+                ></i>
+                <div
+                        id="dropdownUserContent"
+                        class="user__dropdown__content"
+                >
+                    <ul>
+                        <li>
+                            <a href="#">Profile</a>
+                        </li>
+                        <li>
+                            <a href="/logout">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+    </div>
+</body>
+</html>

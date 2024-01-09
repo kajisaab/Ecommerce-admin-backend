@@ -1,4 +1,4 @@
-package com.ecommerce.ecommerce.ssr.home.homeController;
+package com.ecommerce.ecommerce.ssr.userPage.userPageController;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -6,12 +6,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/dashboardPage")
-public class HomeController {
+@RequestMapping("/usersPage")
+public class UserPageController {
 
     @GetMapping("")
-    public String getHome(Model model){
-        model.addAttribute("pageTitle", "Dashboard");
-        return "home";
+    public String getUser(Model model){
+        model.addAttribute("pageTitle", "Users");
+        return "userPage";
     }
 }

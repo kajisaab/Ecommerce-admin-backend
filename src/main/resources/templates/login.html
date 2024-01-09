@@ -34,21 +34,11 @@
     <span>
       Welcome to login form
     </span>
-<!--        <th:block th:if="${session.errorMessage}">-->
-<!--        <p style="color: red;">-->
-<!--            <strong>Error:</strong> <span>[[${session.errorMessage}]]</span>-->
-<!--        </p>-->
-<!--            <th:block th:text ="${#session.removeAttribute('errorMessage')}"></th:block>-->
-<!--&lt;!&ndash;            <th:block th:text="${#session.removeAttribute('errorMessage')}"></th:block>&ndash;&gt;-->
-<!--        </th:block>-->
         <div th:if="${not #strings.isEmpty(errorMessage)}" id="toast" class="toast">
             <div th:text="${errorMessage}" class="toast-body"></div>
 
         </div>
         <p>Testing purpose</p>
-<!--        <p th:if="${errorMessage != null}" style="color: red;">-->
-<!--            <strong>Error:</strong> <span th:text="${errorMessage}"></span>-->
-<!--        </p>-->
         <form class="form__container" th:action="@{/login}" method="post">
             <label id='email' class='login__input__container'>
                 UserName

@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="common-fragment :: html__head"></div>
+
+    <link rel="stylesheet" th:href="@{/css/vendorPage.css}">
+    <script th:src="@{/js/vendorPage.js}" async defer></script>
+</head>
+<body>
+<div th:replace="common :: sidebar"></div>
+<div class = "main__content__wrapper">
+    <div th:replace="common :: header_container"></div>
+    <div class = "main__content__container">
+        <div id="loading" style="display: none;">
+            Loading...
+        </div>
+        <section class="main__content">
+            
+        </section>
+    </div>
+</div>
+</body>
+</html>

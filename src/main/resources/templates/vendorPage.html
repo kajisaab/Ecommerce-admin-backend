@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="common-fragment :: html__head"></div>
+
+    <link rel="stylesheet" th:href="@{/css/vendorPage.css}">
+    <script th:src="@{/js/vendorPage.js}" async defer></script>
+</head>
+<body>
+<div th:replace="common :: sidebar"></div>
+<div class = "main__content__wrapper">
+    <div th:replace="common :: header_container"></div>
+    <div class = "main__content__container">
+        <div id="loading" style="display: none;">
+            Loading...
+        </div>
+        <section class="main__content">
+            <div class="action__button__container">
+                <div  class="sorting__option">
+                    <span id = "sortingOption" onclick="openDropdown()">Sorting</span>
+                    <div id="dropdownContainer" class="user__dropdown__content">
+                        <ul>
+                            <li>
+                                <span class="dropdown__menu__item" onclick="sortCards('asc')">
+                                    A-Z
+                                </span>
+                            </li>
+                            <li>
+                                <span class="dropdown__menu__item" onclick="sortCards('desc')">Z-A</span>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+                <button class="primary__button">Add Vendor</button>
+            </div>
+            <div class="card-container">
+<!--                <div class="card" th:each="detail : ${vendors}">-->
+<!--                    <h3 th:text="${detail.name}"></h3>-->
+<!--                    &lt;!&ndash; Add more card details as needed &ndash;&gt;-->
+<!--                    <span>abc</span><span>def</span><span>ghi</span-->
+<!--                ><span>jkl</span><span>mno</span><span>pqr</span>-->
+<!--                </div>-->
+            </div>
+
+        </section>
+    </div>
+</div>
+</body>
+</html>
