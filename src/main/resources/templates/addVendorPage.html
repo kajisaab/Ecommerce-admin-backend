@@ -15,8 +15,38 @@
             Loading...
         </div>
         <section class="main__content">
-            
+            <form th:action="@{/vendorPage/add-vendors}" th:object="${user}" method="post">
+                <!-- Step 1: Personal Information -->
+                <div th:if="${param.step == null or param.step == 0}">
+<!--                    Name: <input type="text" th:field="*{name}"><br>-->
+                    Email: <input type="text" th:field="*{email}"><br>
+                    <input type="hidden" name="_page" value="0">
+                    <button type="submit">Next</button>
+                </div>
+
+                <!-- Step 2: Address Information -->
+                <div th:if="${param.step == 1}">
+<!--                    Address: <input type="text" th:field="*{address}"><br>-->
+<!--                    City: <input type="text" th:field="*{city}"><br>-->
+                    <input type="hidden" name="_page" value="1">
+                    <button type="submit">Next</button>
+                </div>
+
+                <!-- Step 3: Review and Submit -->
+                <div th:if="${param.step == 2}">
+                    <!-- Display a summary of entered information for review -->
+<!--                    <p th:text="${user.name}"></p>-->
+                    <p th:text="${user.email}"></p>
+                    <p th:text="${user.address}"></p>
+                    <p th:text="${user.city}"></p>
+                    <input type="hidden" name="_page" value="2">
+                    <button type="submit">Submit</button>
+                </div>
+            </form>
         </section>
+        <script>
+            console.log(param)
+        </script>
     </div>
 </div>
 </body>

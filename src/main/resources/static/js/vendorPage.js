@@ -66,3 +66,8 @@ function hideLoading() {
         loadingElement.style.display = 'none';
     }
 }
+
+
+function addVendor(){
+    window.location.href = '/vendorPage/add-vendors';
+}

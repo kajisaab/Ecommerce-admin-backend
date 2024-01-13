@@ -1,5 +1,6 @@
 package com.ecommerce.ecommerce.ssr.vendorPage.vendorPageController;
 
+import com.ecommerce.ecommerce.feature.auth.entity.User;
 import com.ecommerce.ecommerce.feature.vendor.dto.VendorInfoProjection;
 import com.ecommerce.ecommerce.feature.vendor.entity.VendorInfo;
 import com.ecommerce.ecommerce.feature.vendor.repository.VendorDetailsRepository;
@@ -8,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +39,33 @@ public class VendorPageController {
         }
         System.out.println("This is the vendor list " + cardDetails );
         return "vendorPage";
+    }
+
+    @GetMapping("/add-vendors")
+    public String addVendor(Model model){
+        model.addAttribute("pageTitle", "Add Vendor");
+        model.addAttribute("user", new User());
+        return "addVendorPage";
+    }
+
+    @PostMapping("/add-vendors")
+    public String processMultiStepForm(@ModelAttribute("user") User user,
+                                       @RequestParam("_page") int currentPage) {
+        // Handle form data for each step
+        switch (currentPage) {
+            case 0:
+                // Process personal information
+                System.out.println("This is first step");
+                break;
+            case 1:
+                // Process address information
+                break;
+            case 2:
+                // Process final step (review and submit)
+                break;
+        }
+
+        return "redirect:/vendorPage/add-vendors?step=" + (currentPage + 1);
     }
 
     @GetMapping("/cards")
