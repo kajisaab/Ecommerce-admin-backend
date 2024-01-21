@@ -22,12 +22,12 @@ public class AuthenticationController {
     private final LoginUsecase loginUsecase;
 
     @PostMapping("/register")
-    public ResponseEntity<Object>register(@RequestBody SignupUsecaseRequestDto request) throws BadRequestException {
+    public ResponseEntity<Object> register(@RequestBody SignupUsecaseRequestDto request) throws BadRequestException {
         return ResponseHandler.responseBuilder("User Created", HttpStatus.OK, signupUsecase.register(request));
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<Object>authenticate(@RequestBody SigninUsecaseRequestDto request) throws BadRequestException{
+    public ResponseEntity<Object> authenticate(@RequestBody SigninUsecaseRequestDto request) throws BadRequestException {
         System.out.println("This is signin block");
         return ResponseHandler.responseBuilder("SUCCESS", HttpStatus.OK, loginUsecase.authenticate(request));
     }

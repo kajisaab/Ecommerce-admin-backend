@@ -20,9 +20,9 @@ public class VendorListService {
     }
 
     public List<VendorInfoProjection> getVendorList() {
-        Optional<VendorInfoProjection> vendorDetailsList = vendorDetailsRepository.getAllVendor();
+        List<VendorInfoProjection> vendorDetailsList = vendorDetailsRepository.getAllVendor();
 
         System.out.println("This is the vendorDetailsList " + vendorDetailsList);
-        return vendorDetailsList.map(Collections::singletonList).orElseGet(Collections::emptyList);
+        return vendorDetailsList;
     }
 }

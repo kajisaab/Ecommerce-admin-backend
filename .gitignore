@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### remove application-dev.yml file from git
+application-dev.yml

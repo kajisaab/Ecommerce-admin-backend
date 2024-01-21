@@ -1,0 +1,55 @@
+spring:
+  profiles:
+    active: ${ACTIVE_PROFILE:dev}
+  thymeleaf:
+    suffix: .html
+    prefix: classpath:/templates/
+
+  datasource:
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_DATABASE}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
+
+  mail:
+    host: ${EMAIL_HOST}
+    port: ${EMAIL_PORT}
+    username: ${USER_EMAIL}
+    password: ${USER_PASSWORD}
+    default-encoding: UTF-8
+    properties:
+      mail:
+        mime:
+          charset: UTF
+        smtp:
+          write timeout: 10000
+          connection-timeout: 10000
+          timeout: 10000
+          auth: true
+          starttls:
+            enable: true
+            required: true
+    verify:
+      host: ${VERIFY_EMAIL_HOST}
+
+
+server:
+  port: ${SERVER_PORT:8080}
+#  servlet:
+#    context-path: /v1/api
+
+logging:
+  level:
+    org:
+      springframework: DEBUG
+      thymeleaf: DEBUG

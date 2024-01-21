@@ -19,7 +19,7 @@ public class VendorInfoUsecase {
         if (!Objects.isNull(violations)) {
             throw new BadRequestException(violations);
         }
-        throw new BadRequestException("User with the email "  + " already exists");
+        throw new BadRequestException("User with the email " + " already exists");
     }
 
 }

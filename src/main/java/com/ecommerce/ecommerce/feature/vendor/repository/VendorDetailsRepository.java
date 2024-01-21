@@ -12,5 +12,6 @@ public interface VendorDetailsRepository extends JpaRepository<VendorInfo,String
     @Query(value = "SELECT vi.id AS vendor_id, vi.vendor_name, vi.image, vr.rating, vi.contact_no " +
     "FROM vendor_info vi " +
     "JOIN vendor_review vr ON vi.id = vr.vendor_id", nativeQuery = true)
-    Optional<VendorInfoProjection> getAllVendor();
+    List<VendorInfoProjection> getAllVendor();
+
 }
