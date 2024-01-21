@@ -1,6 +1,7 @@
 package com.ecommerce.ecommerce.feature.auth.usecase;
 
 import com.ecommerce.ecommerce.core.validation.ValidationUtils;
+import com.ecommerce.ecommerce.feature.auth.enumConstant.RoleEnum;
 import com.ecommerce.ecommerce.feature.auth.enumConstant.UserTypeEnum;
 import com.ecommerce.ecommerce.feature.auth.responseDto.SignupResponse;
 import com.ecommerce.ecommerce.feature.auth.requestDto.SignupUsecaseRequestDto;
@@ -12,7 +13,6 @@ import com.ecommerce.ecommerce.email.impl.EmailServiceImpl;
 import com.ecommerce.ecommerce.feature.auth.entity.OtpSetting;
 import com.ecommerce.ecommerce.feature.auth.entity.User;
 import com.ecommerce.ecommerce.feature.auth.entity.UserCredential;
-import com.ecommerce.ecommerce.feature.auth.enumConstant.Role;
 import com.ecommerce.ecommerce.feature.auth.repository.OtpSettingRepository;
 import com.ecommerce.ecommerce.feature.auth.repository.UserCredentialRepository;
 import com.ecommerce.ecommerce.feature.auth.repository.UserDetailsRepository;
@@ -42,7 +42,7 @@ public class SignupUsecase {
         }
         boolean isUserAlreadyRegistered = isNewUser(request.getEmail());
         if(!isUserAlreadyRegistered){
-            var user = User.builder().firstName(request.getFirstName()).lastName(request.getLastName()).email(request.getEmail()).userName(request.getUserName()).role(Role.USER).userType(UserTypeEnum.VENDOR).password(passwordEncoder.encode((request.getPassword()))).build();
+            var user = User.builder().firstName(request.getFirstName()).lastName(request.getLastName()).email(request.getEmail()).userName(request.getUserName()).role(RoleEnum.ADMIN).userType(UserTypeEnum.VENDOR).password(passwordEncoder.encode((request.getPassword()))).build();
             User savedUser = userDetailsRepository.save(user);
 
             UserCredential userCredential = new UserCredential();

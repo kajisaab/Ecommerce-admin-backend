@@ -5,6 +5,7 @@ import com.ecommerce.ecommerce.core.jwt.JwtService;
 import com.ecommerce.ecommerce.core.validation.ValidationUtils;
 import com.ecommerce.ecommerce.feature.auth.entity.User;
 import com.ecommerce.ecommerce.feature.auth.entity.UserCredential;
+import com.ecommerce.ecommerce.feature.auth.enumConstant.RoleEnum;
 import com.ecommerce.ecommerce.feature.auth.requestDto.SigninUsecaseRequestDto;
 import com.ecommerce.ecommerce.feature.auth.responseDto.SigninResponse;
 import com.ecommerce.ecommerce.feature.auth.repository.UserCredentialRepository;
@@ -38,10 +39,12 @@ public class LoginUsecase {
         }
         Optional<User> userDetails = userDetailsRepository.findByEmail(request.getEmail());
         AtomicReference<String> jwtToken = new AtomicReference<>("");
+        String userDefinedRole = RoleEnum.USER.getDisplayName();
 
         if (userDetails.isPresent()) {
             User user = userDetails.get();
             String userId = user.getId();
+            userDefinedRole = user.getRole().getDisplayName();
 
             List<UserCredential> userCredentialDetails = userCredentialRepository.findByUserId(userId);
 
@@ -65,6 +68,6 @@ public class LoginUsecase {
             throw new BadRequestException("Cannot find the user with " + request.getEmail() + " email");
         }
 
-        return SigninResponse.builder().token(jwtToken.get()).build();
+        return SigninResponse.builder().token(jwtToken.get()).role(userDefinedRole).build();
     }
 }

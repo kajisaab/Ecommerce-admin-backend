@@ -1,6 +1,6 @@
 package com.ecommerce.ecommerce.feature.auth.entity;
 
-import com.ecommerce.ecommerce.feature.auth.enumConstant.Role;
+import com.ecommerce.ecommerce.feature.auth.enumConstant.RoleEnum;
 import com.ecommerce.ecommerce.feature.auth.enumConstant.UserTypeEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -52,7 +52,7 @@ public class User implements UserDetails {
     private boolean isActive;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private RoleEnum role;
 
     @Enumerated(EnumType.STRING)
     private UserTypeEnum userType;
@@ -72,7 +72,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority(role.getDisplayName()));
     }
 
     @Override

@@ -23,6 +23,6 @@ public enum VendorTypeEnum {
             }
 
         }
-        throw new IllegalArgumentException("Unknown display name: " + displayName);
+        throw new IllegalArgumentException("Vendor Type can have only Service Provider, Product Seller or Product+Service provider!");
     }
 }

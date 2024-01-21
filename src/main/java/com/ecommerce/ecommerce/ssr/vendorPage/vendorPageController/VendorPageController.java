@@ -1,9 +1,6 @@
 package com.ecommerce.ecommerce.ssr.vendorPage.vendorPageController;
 
 import com.ecommerce.ecommerce.feature.auth.entity.User;
-import com.ecommerce.ecommerce.feature.vendor.dto.VendorInfoProjection;
-import com.ecommerce.ecommerce.feature.vendor.entity.VendorInfo;
-import com.ecommerce.ecommerce.feature.vendor.repository.VendorDetailsRepository;
 import com.ecommerce.ecommerce.ssr.vendorPage.services.VendorListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/vendorPage")
@@ -31,7 +27,7 @@ public class VendorPageController {
         model.addAttribute("pageTitle", "Vendor");
 
 //        to fetch the vendor card details on the page load
-        List<VendorInfoProjection> cardDetails = vendorListService.getVendorList();
+        List<VendorListDtoabc> cardDetails = vendorListService.getVendorList();
         if(cardDetails != null && !cardDetails.isEmpty()){
             model.addAttribute("vendors", cardDetails);
         }else {
@@ -69,8 +65,8 @@ public class VendorPageController {
     }
 
     @GetMapping("/cards")
-    public ResponseEntity<List<VendorInfoProjection>> getCards(Model model, @RequestParam(name = "sort", defaultValue = "asc") String sortOrder) {
-        List<VendorInfoProjection> cardDetails = vendorListService.getVendorList();
+    public ResponseEntity<List<VendorListDtoabc>> getCards(Model model, @RequestParam(name = "sort", defaultValue = "asc") String sortOrder) {
+        List<VendorListDtoabc> cardDetails = vendorListService.getVendorList();
         if(cardDetails != null && !cardDetails.isEmpty()){
             model.addAttribute("vendors", cardDetails);
         }else {

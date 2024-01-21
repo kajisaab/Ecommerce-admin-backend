@@ -1,5 +1,6 @@
 package com.ecommerce.ecommerce.feature.vendor.requestDto;
 
+import com.ecommerce.ecommerce.feature.vendor.Constant.VendorTypeEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -29,9 +30,32 @@ public class OnboardVendorRequestDto {
     @NotBlank(message = "State cannot be empty")
     private String state;
 
+    private String street;
+
     @NotNull(message = "Name cannot be null")
     @NotBlank(message = "Name cannot be empty")
-    private String name;
+    private String vendorName;
+
+    private String vendorType;
 
     private String zipCode;
+
+    private String facebookUrl;
+
+    private String instagramUrl;
+
+    private String twitterUrl;
+
+
+    @NotNull(message = "Account name cannot be null")
+    @NotBlank(message = "Account name cannot be empty")
+    private String accountHolder;
+
+    @NotNull(message = "Account number cannot be null")
+    @NotBlank(message = "Account number cannot be empty")
+    private String accountNumber;
+
+    @NotNull(message = "Bank name cannot be null")
+    @NotBlank(message = "Bank name cannot be empty")
+    private String bankName;
 }

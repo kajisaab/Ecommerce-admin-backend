@@ -10,19 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OnboardVendorResponseDto {
-    private String area;
-
-    private String contactNumber;
-
-    private String country;
-
-    private String district;
-
-    private String image;
-
-    private String state;
-
-    private String name;
-
-    private String zipCode;
+    public String message;
 }

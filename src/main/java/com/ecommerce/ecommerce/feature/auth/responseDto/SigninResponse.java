@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SigninResponse {
     public String token;
+    public String role;
 }
