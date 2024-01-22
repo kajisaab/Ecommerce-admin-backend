@@ -13,6 +13,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.rmi.ServerException;
@@ -23,20 +24,8 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler{
 
-    @ExceptionHandler(value = {HttpClientErrorException.Forbidden.class, AccessDeniedException.class })
-    protected ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException e) {
-        int forbiddenRequest = HttpStatus.FORBIDDEN.value();
-        Object responseMessageObject = new GenerateMessageObject("Access Denied: " + e.getMessage());
-        ApiException apiException = new ApiException(
-                forbiddenRequest,
-                HttpStatus.FORBIDDEN,
-                responseMessageObject
-        );
-        return new ResponseEntity<>(apiException, HttpStatus.valueOf(forbiddenRequest));
-    }
-
     @ExceptionHandler(value = {BadRequestException.class})
-    public ResponseEntity<Object> resourceNotFoundExceptionHandler(BadRequestException e){
+    public ResponseEntity<Object> badRequestExceptionHandler(BadRequestException e){
         int badRequest = HttpStatus.BAD_REQUEST.value();
         Object responseMessageObject = new GenerateMessageObject(e.getMessage());
         ApiException apiException = new ApiException(
@@ -47,7 +36,6 @@ public class GlobalExceptionHandler{
 
         return new ResponseEntity<>(apiException, HttpStatusCode.valueOf(badRequest));
     }
-
 
     // Handles the jwt expiry exception
     @ExceptionHandler(value = {ClaimJwtException.class})
