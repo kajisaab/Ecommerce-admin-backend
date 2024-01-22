@@ -1,13 +1,18 @@
 package com.ecommerce.ecommerce.core.expception;
 
 import io.jsonwebtoken.ClaimJwtException;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.ServletException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedCredentialsNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.io.IOException;
 import java.rmi.ServerException;
@@ -17,6 +22,19 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler{
+
+    @ExceptionHandler(value = {HttpClientErrorException.Forbidden.class, AccessDeniedException.class })
+    protected ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException e) {
+        int forbiddenRequest = HttpStatus.FORBIDDEN.value();
+        Object responseMessageObject = new GenerateMessageObject("Access Denied: " + e.getMessage());
+        ApiException apiException = new ApiException(
+                forbiddenRequest,
+                HttpStatus.FORBIDDEN,
+                responseMessageObject
+        );
+        return new ResponseEntity<>(apiException, HttpStatus.valueOf(forbiddenRequest));
+    }
+
     @ExceptionHandler(value = {BadRequestException.class})
     public ResponseEntity<Object> resourceNotFoundExceptionHandler(BadRequestException e){
         int badRequest = HttpStatus.BAD_REQUEST.value();
@@ -30,10 +48,26 @@ public class GlobalExceptionHandler{
         return new ResponseEntity<>(apiException, HttpStatusCode.valueOf(badRequest));
     }
 
+
+    // Handles the jwt expiry exception
     @ExceptionHandler(value = {ClaimJwtException.class})
     public ResponseEntity<Object> resourceNotFoundExceptionHandler(ClaimJwtException e){
         int badRequest = HttpStatus.UNAUTHORIZED.value();
         Object responseMessageObject = new GenerateMessageObject("Token invalid or Expired!");
+        ApiException apiException = new ApiException(
+                badRequest,
+                HttpStatus.UNAUTHORIZED,
+                responseMessageObject
+        );
+
+        return new ResponseEntity<>(apiException, HttpStatusCode.valueOf(badRequest));
+    }
+
+
+    @ExceptionHandler(value = {ExpiredJwtException.class})
+    public ResponseEntity<Object> expiredExceptionHandler(ExpiredJwtException e){
+        int badRequest = HttpStatus.UNAUTHORIZED.value();
+        Object responseMessageObject = new GenerateMessageObject("Token Expired!");
         ApiException apiException = new ApiException(
                 badRequest,
                 HttpStatus.UNAUTHORIZED,
@@ -64,6 +98,7 @@ public class GlobalExceptionHandler{
         return new ResponseEntity<>(apiException, HttpStatusCode.valueOf(internalServerError));
     }
 
+    // Handles any IllegalArgument Exception and IllegalArgumentException is used in every Enum as well
     @ExceptionHandler(value = {IllegalArgumentException.class})
     public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException e){
         Object responseMessageObject = new GenerateMessageObject(e.getMessage());
@@ -76,6 +111,7 @@ public class GlobalExceptionHandler{
         return new ResponseEntity<>(apiException, HttpStatusCode.valueOf(badRequest));
     }
 
+    // Handles all the sql error
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
     public ResponseEntity<Object> handleSQLException(SQLIntegrityConstraintViolationException e){
         Object responseMessageObject = new GenerateMessageObject(e.getMessage());
@@ -86,5 +122,17 @@ public class GlobalExceptionHandler{
                 responseMessageObject
         );
         return new ResponseEntity<>(apiException, HttpStatusCode.valueOf(badRequest));
+    }
+
+    @ExceptionHandler(MalformedJwtException.class)
+    public ResponseEntity<Object> handleInvalidJwtToken(MalformedJwtException e){
+        Object responseMessageObject = new GenerateMessageObject(e.getMessage());
+        int unauthorizedRequest = HttpStatus.UNAUTHORIZED.value();
+        ApiException apiException = new ApiException(
+                unauthorizedRequest,
+                HttpStatus.UNAUTHORIZED,
+                responseMessageObject
+        );
+        return new ResponseEntity<>(apiException, HttpStatusCode.valueOf(unauthorizedRequest));
     }
 }

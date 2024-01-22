@@ -13,20 +13,7 @@ public class VendorListResponseDto {
     public String vendorId;
     public String vendorName;
     public String contactNo;
-    public String area;
-    public String street;
-    public String district;
-    public String state;
-    public String country;
-    public String zipCode;
-    public String vendorType;
-    public String status;
+    public Integer rating;
     public String image;
-    public String bankName;
-    public String accountHolder;
-    public String accountNumber;
-    public String facebookUrl;
-    public String twitterUrl;
-    public String instagramUrl;
 }
 
