@@ -28,7 +28,6 @@ public class AuthenticationController {
 
     @PostMapping("/signin")
     public ResponseEntity<Object> authenticate(@RequestBody SigninUsecaseRequestDto request) throws BadRequestException {
-        System.out.println("This is signin block");
         return ResponseHandler.responseBuilder("SUCCESS", HttpStatus.OK, loginUsecase.authenticate(request));
     }
 }

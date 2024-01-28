@@ -2,7 +2,7 @@ package com.ecommerce.ecommerce.feature.vendor.usecase;
 
 import com.ecommerce.ecommerce.feature.vendor.repository.VendorInfoRepository;
 import com.ecommerce.ecommerce.feature.vendor.responseDto.VendorListResponseDto;
-import com.ecommerce.ecommerce.feature.vendor.service.GetAllVendorList;
+import com.ecommerce.ecommerce.feature.vendor.service.GetAllVendorListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class GetAllVendorListUsecase implements GetAllVendorList {
+public class GetAllVendorListServiceUsecase implements GetAllVendorListService {
 
 
     private final VendorInfoRepository vendorInfoRepository;
@@ -33,7 +33,7 @@ public class GetAllVendorListUsecase implements GetAllVendorList {
        vendor.vendorId = (String) result.get("vendor_id");
        vendor.contactNo = (String) result.get("contact_no");
        vendor.image = (String) result.get("image");
-       vendor.rating = (Integer) result.get("rating");
+       vendor.rating =  result.get("rating") != null ? (Integer) result.get("rating") : 0;
        return vendor;
     }
 }

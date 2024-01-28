@@ -1,15 +1,12 @@
 package com.ecommerce.ecommerce.core.interceptor;
 
+import com.ecommerce.ecommerce.core.jwt.CustomUserDetailsService;
 import com.ecommerce.ecommerce.core.jwt.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -18,9 +15,9 @@ import java.util.concurrent.atomic.AtomicReference;
 @Slf4j
 public class AuthHandlerInterceptor implements HandlerInterceptor {
     private final JwtService jwtService;
-    private final UserDetailsService userDetailsService;
+    private final CustomUserDetailsService userDetailsService;
 
-    public AuthHandlerInterceptor(JwtService jwtService, UserDetailsService userDetailsService) {
+    public AuthHandlerInterceptor(JwtService jwtService, CustomUserDetailsService userDetailsService) {
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
     }
@@ -34,10 +31,10 @@ public class AuthHandlerInterceptor implements HandlerInterceptor {
         if(authHeader != null) {
             jwt = authHeader;
             userEmail = jwtService.extractUserEmail(jwt); // todo extract the userEmail from JWT token;
-            if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null){
+            if(userEmail != null){
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-
                 if(jwtService.isTokenValid(jwt, userDetails)) {
+                    System.out.println("here hitting");
                     jwtToken.set(jwtService.generateToken(userDetails));
                     response.setHeader("X-XSRF-TOKEN", jwtToken.get());
                 }

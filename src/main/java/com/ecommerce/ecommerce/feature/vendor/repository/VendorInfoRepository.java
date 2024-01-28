@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public interface VendorInfoRepository extends JpaRepository<VendorInfo, String> {
-    @Query(value = "SELECT vi.id AS vendor_id, vi.vendor_name, vi.image, COALESCE(vr.rating, 0), vi.contact_no " +
+    @Query(value = "SELECT vi.id AS vendor_id, vi.vendor_name, vi.image, COALESCE(vr.rating, 1), vi.contact_no " +
             "FROM vendor_info vi " +
             "LEFT JOIN vendor_review vr ON vi.id = vr.vendor_id", nativeQuery = true)
     List<Map<String, Object>> getAllVendor();

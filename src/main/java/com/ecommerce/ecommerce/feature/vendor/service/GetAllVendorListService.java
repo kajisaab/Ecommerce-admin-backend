@@ -4,7 +4,7 @@ import com.ecommerce.ecommerce.feature.vendor.responseDto.VendorListResponseDto;
 
 import java.util.List;
 
-public interface GetAllVendorList {
+public interface GetAllVendorListService {
 
     List<VendorListResponseDto> getAllVendroDetailsList();
 }
