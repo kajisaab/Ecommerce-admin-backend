@@ -4,6 +4,7 @@ import io.jsonwebtoken.ClaimJwtException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.ServletException;
+import org.springframework.core.convert.ConverterNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -123,4 +124,17 @@ public class GlobalExceptionHandler{
         );
         return new ResponseEntity<>(apiException, HttpStatusCode.valueOf(unauthorizedRequest));
     }
+
+    @ExceptionHandler(ConverterNotFoundException.class)
+    public ResponseEntity<Object> handleJpaConverterException(ConverterNotFoundException e){
+        Object responseMessageObject = new GenerateMessageObject(e.getMessage());
+        int unauthorizedRequest = HttpStatus.BAD_REQUEST.value();
+        ApiException apiException = new ApiException(
+                unauthorizedRequest,
+                HttpStatus.BAD_REQUEST,
+                responseMessageObject
+        );
+        return new ResponseEntity<>(apiException, HttpStatusCode.valueOf(unauthorizedRequest));
+    }
+
 }
