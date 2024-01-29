@@ -41,7 +41,6 @@ public class UpdateVendorDetail implements UpdateVendorDetailsService {
 
             VendorInfo vendorInfo = mapToVendorInfo(vendorDetailsRequest);
 
-
             //vendor bank detail
             VendorBankDetail bankDetail = vendorInfo.getVendorBankDetail();
             bankDetail.setId(vendorBankDetailsId);

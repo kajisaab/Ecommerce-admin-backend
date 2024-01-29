@@ -1,6 +1,5 @@
 package com.ecommerce.ecommerce.feature.vendor.repository;
 
-import com.ecommerce.ecommerce.feature.vendor.dto.VendorDetailDto;
 import com.ecommerce.ecommerce.feature.vendor.entity.VendorInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -8,7 +7,6 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 public interface VendorInfoRepository extends JpaRepository<VendorInfo, String> {
     @Query(value = "SELECT vi.id AS vendor_id, vi.vendor_name, vi.image, COALESCE(vr.rating, 1), vi.contact_no " +
@@ -23,5 +21,5 @@ public interface VendorInfoRepository extends JpaRepository<VendorInfo, String> 
             " WHERE vi.id = :id ", nativeQuery = true
     )
     Map<String, Object> getIndividualVendor(@Param(value = "id") String id);
-
+    
 }

@@ -29,9 +29,6 @@ public class UserCredential extends DBEntity {
     @Column()
     private String passwordHistory;
 
-    @Column(columnDefinition = "TINYINT(1) default 0")
-    private boolean isDeleted;
-
     @OneToOne()
     @JoinColumn(name = "user_id")
     private User userDetails;
@@ -46,7 +43,6 @@ public class UserCredential extends DBEntity {
                 ", max_login_attempts=" + maxLoginAttempts +
                 ", login_attempts=" + loginAttempts +
                 ", passwordHistory='" + passwordHistory + '\'' +
-                ", is_deleted=" + isDeleted +
                 '}';
     }
 }
