@@ -3,6 +3,11 @@ package com.ecommerce.ecommerce.feature.vendor.usecase;
 import com.ecommerce.ecommerce.common.StatusEnum;
 import com.ecommerce.ecommerce.core.expception.BadRequestException;
 import com.ecommerce.ecommerce.core.validation.ValidationUtils;
+import com.ecommerce.ecommerce.email.EmailService;
+import com.ecommerce.ecommerce.feature.auth.requestDto.SignupUsecaseRequestDto;
+import com.ecommerce.ecommerce.feature.auth.responseDto.SignupResponse;
+import com.ecommerce.ecommerce.feature.auth.service.GeneratePassword;
+import com.ecommerce.ecommerce.feature.auth.usecase.SignupUsecase;
 import com.ecommerce.ecommerce.feature.vendor.Constant.VendorTypeEnum;
 import com.ecommerce.ecommerce.feature.vendor.entity.VendorBankDetail;
 import com.ecommerce.ecommerce.feature.vendor.entity.VendorInfo;
@@ -25,12 +30,18 @@ public class OnboardVendorUsecase implements OnboardVendorService {
     private final VendorInfoRepository vendorInfoRepository;
     private final VendorSocialSettingRepository vendorSocialSettingRepository;
     private final VendorBankDetailsRepository vendorBankDetailsRepository;
+    private final SignupUsecase signupUsecase;
+    private final EmailService emailService;
 
     @Override
     public OnboardVendorResponseDto onboardVendor(OnboardVendorRequestDto vendorDetailsRequest) {
         String violations = ValidationUtils.validate(vendorDetailsRequest);
         if(!Objects.isNull(violations)) {
             throw new BadRequestException(violations);
+        }
+
+        if(vendorDetailsRequest.getMunicipality() == null && vendorDetailsRequest.getRuralMunicipality() == null ){
+            throw new BadRequestException("Municipality or RuralMunicipality is required");
         }
 
         // Map the Dto to the entities
@@ -48,22 +59,46 @@ public class OnboardVendorUsecase implements OnboardVendorService {
         socialSetting.setVendorInfo(vendorInfo);
         vendorSocialSettingRepository.save(socialSetting);
 
+        String vendorPassword = GeneratePassword.generate(9);
+        SignupUsecaseRequestDto signupRequestDto = getSignupUsecaseRequestDto(vendorDetailsRequest, vendorPassword);
+
+        SignupResponse response = this.signupUsecase.register(signupRequestDto);
+
+        if(response.getMessage().equals("Successfully Created user")){
+//            this.emailService.sendHtmlEmail();
+            System.out.println("Send the password to the email from here which is " + vendorPassword);
+        }
+
         return new OnboardVendorResponseDto("Successfully Created Vendor");
+    }
+
+    private SignupUsecaseRequestDto getSignupUsecaseRequestDto(OnboardVendorRequestDto vendorDetailsRequest, String vendorPassword) {
+        String userName;
+        if(vendorDetailsRequest.getVendorUserName() != null && !vendorDetailsRequest.getVendorUserName().isEmpty()) {
+            userName = vendorDetailsRequest.getVendorUserName();
+        }else {
+            userName = vendorDetailsRequest.getVendorFirstName() + " " + vendorDetailsRequest.getVendorLastName();
+        }
+        return new SignupUsecaseRequestDto(
+                vendorDetailsRequest.getVendorFirstName(),
+                vendorDetailsRequest.getVendorLastName(),
+                vendorDetailsRequest.getVendorEmail(),
+                vendorPassword,
+                userName,
+                vendorDetailsRequest.getContactNumber()
+        );
     }
 
     private VendorInfo mapToVendorInfo(OnboardVendorRequestDto dto) {
         // Mapping logic...
+        String vendorName = dto.getVendorFirstName() + " " + dto.getVendorLastName();
 
         // setting the vendor Info details;
         VendorInfo vendorInfo = new VendorInfo();
-        vendorInfo.setVendorName(dto.getVendorName());
+        vendorInfo.setVendorName(vendorName);
+        vendorInfo.setEmail(dto.getVendorEmail());
+        vendorInfo.setVendorBusinessName(dto.getVendorBusinessName());
         vendorInfo.setContactNo(dto.getContactNumber());
-        vendorInfo.setArea(dto.getArea());
-        vendorInfo.setStreet(dto.getStreet());
-        vendorInfo.setDistrict(dto.getDistrict());
-        vendorInfo.setState(dto.getState());
-        vendorInfo.setCountry(dto.getCountry());
-        vendorInfo.setZipCode(dto.getZipCode());
         vendorInfo.setSlug("abc");
         vendorInfo.setVendorType(VendorTypeEnum.fromDisplayName(dto.getVendorType()));
         vendorInfo.setStatus(StatusEnum.PENDING);

@@ -30,4 +30,9 @@ public class SignupUsecaseRequestDto {
 
     @NotNull
     private String userName;
+
+    @NotNull
+    @NotBlank(message = "Phone Number cannot be empty")
+    @Size(min = 10, max = 10, message = "Phone Number must be of 10 digit")
+    private String phoneNumber;
 }

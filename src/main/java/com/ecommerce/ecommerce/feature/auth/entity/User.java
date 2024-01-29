@@ -42,6 +42,9 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String userName;
 
+    @Column(nullable = false, unique = true)
+    private String phoneNumber;
+
     @Column(nullable = false, columnDefinition = "TINYINT(1) default 0")
     private boolean isDeleted;
 

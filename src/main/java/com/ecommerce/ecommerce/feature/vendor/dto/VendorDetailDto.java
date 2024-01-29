@@ -9,12 +9,7 @@ public class VendorDetailDto {
     private String id;
     private String vendorName;
     private String contactNo;
-    private String area;
-    private String street;
-    private String district;
-    private String state;
-    private String country;
-    private String zipCode;
+    private String email;
     private String vendorType;
     private String status;
     private String image;

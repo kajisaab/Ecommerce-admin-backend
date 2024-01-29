@@ -1,6 +1,8 @@
 package com.ecommerce.ecommerce.feature.auth.enumConstant;
 
 public enum RoleEnum{
+
+    SUPER_ADMIN("Super Admin"),
     USER("User"),
 
     ADMIN("Admin");

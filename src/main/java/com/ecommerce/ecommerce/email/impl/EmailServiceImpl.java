@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import java.util.Objects;
+
 import static com.ecommerce.ecommerce.email.utils.EmailUtils.getEmailMessage;
 
 @Service
@@ -67,11 +69,12 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     @Async
-    public void sendHtmlEmail(int otpCode, String to) {
+    public void sendHtmlEmail(int otpCode, String to, String emailTemplate ) {
+        String template = Objects.requireNonNullElse(emailTemplate, "otpcodeemailtemplate");
         try {
             Context context = new Context();
             context.setVariable("otpCode", otpCode);
-            String text = templateEngine.process(EMAIL_TEMPLATE, context);
+            String text = templateEngine.process(template, context);
             MimeMessage mailMessage = getMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mailMessage, true, UTF_8_ENCODING);
             helper.setPriority(1);

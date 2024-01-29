@@ -21,26 +21,14 @@ public class VendorInfo extends DBEntity {
     @Column(nullable = false)
     private String vendorName;
 
+    @Column(nullable = false)
+    private String email;
+
     @Column(nullable = false, unique = true)
     private String contactNo;
 
-    @Column()
-    private String area;
-
-    @Column()
-    private String street;
-
-    @Column()
-    private String district;
-
-    @Column()
-    private String state;
-
-    @Column()
-    private String country;
-
-    @Column()
-    private String zipCode;
+    @Column(nullable = false)
+    private String vendorBusinessName;
 
     @Column()
     private String slug;

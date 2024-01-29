@@ -1,9 +1,13 @@
 package com.ecommerce.ecommerce.feature.vendor.usecase;
 
+import com.ecommerce.ecommerce.feature.vendor.dto.VendorListDto;
+import com.ecommerce.ecommerce.feature.vendor.dto.VendorPageInfoDto;
 import com.ecommerce.ecommerce.feature.vendor.repository.VendorInfoRepository;
 import com.ecommerce.ecommerce.feature.vendor.responseDto.VendorListResponseDto;
 import com.ecommerce.ecommerce.feature.vendor.service.GetAllVendorListService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,22 +22,24 @@ public class GetAllVendorListServiceUsecase implements GetAllVendorListService {
     private final VendorInfoRepository vendorInfoRepository;
 
     @Override
-    public List<VendorListResponseDto> getAllVendroDetailsList() {
-        List<Map<String, Object>> venderList = vendorInfoRepository.getAllVendor();
-        return venderList.stream()
-                .filter(ts -> !Objects.isNull(ts))
-                .map(this::toListDto)
-                .toList();
+    public VendorListResponseDto getAllVendroDetailsList(String search, Pageable pageable) {
+        Page<Map<String, Object>> vendorPage = vendorInfoRepository.getAllVendor(search, pageable);
+        Page<VendorListDto> vendorList = vendorPage.map(this::toListDto);
+        VendorPageInfoDto pageDetails = new VendorPageInfoDto(vendorList.getPageable().getPageNumber(), vendorList.getPageable().getPageSize(),vendorPage.getTotalElements());
 
+        // Convert List<VendorListDto> to VendorListDto[]
+        VendorListDto[] vendorArray = vendorList.getContent().toArray(new VendorListDto[0]);
+
+        return new VendorListResponseDto(vendorArray, pageDetails);
     }
 
-    private VendorListResponseDto toListDto(Map<String,Object> result) {
-       var vendor = new VendorListResponseDto();
-       vendor.vendorName =(String) result.get("vendor_name");
-       vendor.vendorId = (String) result.get("vendor_id");
-       vendor.contactNo = (String) result.get("contact_no");
-       vendor.image = (String) result.get("image");
-       vendor.rating =  result.get("rating") != null ? (Integer) result.get("rating") : 0;
-       return vendor;
+    private VendorListDto toListDto(Map<String, Object> result) {
+        VendorListDto vendor = new VendorListDto();
+        vendor.setVendorName((String) result.get("vendor_name"));
+        vendor.setVendorId((String) result.get("vendor_id"));
+        vendor.setContactNo((String) result.get("contact_no"));
+        vendor.setImage((String) result.get("image"));
+        vendor.setRating(0);
+        return vendor;
     }
 }

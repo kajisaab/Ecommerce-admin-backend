@@ -13,7 +13,7 @@ public class IndividualVendorDetailsResopnseDto {
     public String vendorId;
     public String vendorName;
     public String contactNo;
-    public String area;
+    public String email;
     public String street;
     public String district;
     public String state;

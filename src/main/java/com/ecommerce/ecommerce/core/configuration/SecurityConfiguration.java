@@ -1,6 +1,7 @@
 package com.ecommerce.ecommerce.core.configuration;
 
 import com.ecommerce.ecommerce.core.jwt.JwtAuthenticationFilter;
+import com.ecommerce.ecommerce.feature.auth.enumConstant.RoleEnum;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -37,6 +38,7 @@ public class SecurityConfiguration {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/register", "/auth/signin").permitAll()
+                        .requestMatchers("/vendor/**").hasAuthority("SUPER_ADMIN")
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptionHandling ->

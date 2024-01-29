@@ -1,5 +1,7 @@
 package com.ecommerce.ecommerce.feature.vendor.responseDto;
 
+import com.ecommerce.ecommerce.feature.vendor.dto.VendorListDto;
+import com.ecommerce.ecommerce.feature.vendor.dto.VendorPageInfoDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,10 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class VendorListResponseDto {
-    public String vendorId;
-    public String vendorName;
-    public String contactNo;
-    public Integer rating;
-    public String image;
+    public VendorListDto[] list;
+    public VendorPageInfoDto pageInfo;
 }
+
 

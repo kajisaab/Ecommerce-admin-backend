@@ -75,12 +75,6 @@ public class UpdateVendorDetail implements UpdateVendorDetailsService {
         vendorInfo.setId(dto.getId());
         vendorInfo.setVendorName(dto.getVendorName());
         vendorInfo.setContactNo(dto.getContactNumber());
-        vendorInfo.setArea(dto.getArea());
-        vendorInfo.setStreet(dto.getStreet());
-        vendorInfo.setDistrict(dto.getDistrict());
-        vendorInfo.setState(dto.getState());
-        vendorInfo.setCountry(dto.getCountry());
-        vendorInfo.setZipCode(dto.getZipCode());
         vendorInfo.setSlug(dto.getSlug());
         vendorInfo.setVendorType(VendorTypeEnum.fromDisplayName(dto.getVendorType()));
         vendorInfo.setStatus(StatusEnum.PENDING);

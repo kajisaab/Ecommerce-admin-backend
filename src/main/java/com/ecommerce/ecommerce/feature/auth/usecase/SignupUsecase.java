@@ -42,7 +42,7 @@ public class SignupUsecase {
         }
         boolean isUserAlreadyRegistered = isNewUser(request.getEmail());
         if(!isUserAlreadyRegistered){
-            var user = User.builder().firstName(request.getFirstName()).lastName(request.getLastName()).email(request.getEmail()).userName(request.getUserName()).role(RoleEnum.ADMIN).userType(UserTypeEnum.VENDOR).password(passwordEncoder.encode((request.getPassword()))).build();
+            var user = User.builder().firstName(request.getFirstName()).lastName(request.getLastName()).email(request.getEmail()).userName(request.getUserName()).role(RoleEnum.ADMIN).userType(UserTypeEnum.VENDOR).phoneNumber(request.getPhoneNumber()).password(passwordEncoder.encode((request.getPassword()))).build();
             User savedUser = userDetailsRepository.save(user);
 
             UserCredential userCredential = new UserCredential();
@@ -53,7 +53,7 @@ public class SignupUsecase {
             var otpDetails = OtpSetting.builder().userCredential(savedCred).otp(generatedOtp.getOtpCode()).expiry_date_time(generatedOtp.getExpiryTime()).build();
             otpSettingRepository.save(otpDetails);
 //            emailService.sendHtmlEmail(generatedOtp.getOtpCode(), request.getEmail());
-            return SignupResponse.builder().message("Successfully Cretaed user").build();
+            return SignupResponse.builder().message("Successfully Created user").build();
         }
         throw new BadRequestException("User with the email " + request.getEmail() + " already exists");
     }

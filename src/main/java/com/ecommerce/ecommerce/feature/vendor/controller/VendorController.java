@@ -4,12 +4,15 @@ import com.ecommerce.ecommerce.core.expception.BadRequestException;
 import com.ecommerce.ecommerce.core.responseHandler.ResponseHandler;
 import com.ecommerce.ecommerce.feature.vendor.requestDto.OnboardVendorRequestDto;
 import com.ecommerce.ecommerce.feature.vendor.requestDto.UpdateVendorRequestDto;
+import com.ecommerce.ecommerce.feature.vendor.requestDto.VendorListRequestDto;
 import com.ecommerce.ecommerce.feature.vendor.service.GetAllVendorListService;
 import com.ecommerce.ecommerce.feature.vendor.service.GetIndividualVendorDetailService;
 import com.ecommerce.ecommerce.feature.vendor.service.OnboardVendorService;
 import com.ecommerce.ecommerce.feature.vendor.service.UpdateVendorDetailsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,9 +27,12 @@ public class VendorController {
     private final GetIndividualVendorDetailService getIndividualVendorDetailService;
     private final UpdateVendorDetailsService updateVendorDetailsService;
 
-    @GetMapping("/list")
-    public ResponseEntity<Object>getALlVendorList() throws BadRequestException {
-        return ResponseHandler.responseBuilder("SUCCESS", HttpStatus.OK, getAllVendorListService.getAllVendroDetailsList());
+    @PostMapping("/list")
+    public ResponseEntity<Object>getALlVendorList(@RequestBody VendorListRequestDto request
+
+    ) throws BadRequestException {
+        Pageable pageable = PageRequest.of(request.page, request.size);
+        return ResponseHandler.responseBuilder("SUCCESS", HttpStatus.OK, getAllVendorListService.getAllVendroDetailsList(request.search, pageable));
     }
 
     @PostMapping("/save")

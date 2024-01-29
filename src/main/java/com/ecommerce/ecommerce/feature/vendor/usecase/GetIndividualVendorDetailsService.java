@@ -25,7 +25,7 @@ public class GetIndividualVendorDetailsService implements GetIndividualVendorDet
              vendorDetails.vendorId = (String) vendorData.get("vendor_id");
              vendorDetails.vendorName = (String) vendorData.get("vendor_name");
              vendorDetails.contactNo = (String) vendorData.get("contact_no");
-             vendorDetails.area = (String) vendorData.get("area");
+             vendorDetails.email = (String) vendorData.get("email");
              vendorDetails.street = (String) vendorData.get("street");
              vendorDetails.district = (String) vendorData.get("district");
              vendorDetails.state = (String) vendorData.get("state");

@@ -14,15 +14,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OnboardVendorRequestDto {
 
-    private String area;
-
     @NotNull(message = "Contact Number cannot be null")
     @NotBlank(message = "Contact Number cannot be empty")
     private String contactNumber;
 
+    @NotNull(message = "Country cannot be null")
+    @NotBlank(message = "Country cannot be empty")
     private String country;
 
-    private String district;
+    @NotNull(message = "Province cannot be null")
+    @NotBlank(message = "Province cannot be empty")
+    private String province;
 
     private String image;
 
@@ -32,9 +34,27 @@ public class OnboardVendorRequestDto {
 
     private String street;
 
-    @NotNull(message = "Name cannot be null")
-    @NotBlank(message = "Name cannot be empty")
-    private String vendorName;
+    private String municipality;
+
+    private String ruralMunicipality;
+
+    @NotNull(message = "First name cannot be null")
+    @NotBlank(message = "First name cannot be empty")
+    private String vendorFirstName;
+
+    @NotNull(message = "Last name cannot be null")
+    @NotBlank(message = "Last name cannot be empty")
+    private String vendorLastName;
+
+    @NotNull(message = "Business Name cannot be null")
+    @NotBlank(message = "Business Name cannot be empty")
+    private String vendorBusinessName;
+
+    @NotNull(message = "Vendor Email cannot be null")
+    @NotBlank(message = "Vendor Email cannot be empty")
+    private String vendorEmail;
+
+    private String vendorUserName;
 
     private String vendorType;
 
@@ -45,7 +65,6 @@ public class OnboardVendorRequestDto {
     private String instagramUrl;
 
     private String twitterUrl;
-
 
     @NotNull(message = "Account name cannot be null")
     @NotBlank(message = "Account name cannot be empty")

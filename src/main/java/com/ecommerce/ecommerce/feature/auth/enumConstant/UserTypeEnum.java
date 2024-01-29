@@ -1,6 +1,7 @@
 package com.ecommerce.ecommerce.feature.auth.enumConstant;
 
 public enum UserTypeEnum {
+    MAKER("Maker"),
     VENDOR("Vendor"),
     CUSTOMER("Customer");
 

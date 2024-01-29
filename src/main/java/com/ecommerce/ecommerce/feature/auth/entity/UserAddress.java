@@ -15,11 +15,26 @@ import lombok.NoArgsConstructor;
 @EntityListeners(AutoCloseable.class)
 public class UserAddress extends DBEntity {
 
-    @Column(nullable = true)
-    private String completeAddress;
+    @Column()
+    private String state;
 
-    @Column(nullable = true)
-    private String phoneNumber;
+    @Column()
+    private String province;
+
+    @Column()
+    private String wardNo;
+
+    @Column()
+    private String street;
+
+    @Column()
+    private String municipality;
+
+    @Column()
+    private String ruralMunicipality;
+
+    @Column()
+    private String zipCode;
 
     @OneToOne()
     @JoinColumn(name = "user_id")
