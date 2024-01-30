@@ -77,4 +77,5 @@ public class OnboardVendorRequestDto {
     @NotNull(message = "Bank name cannot be null")
     @NotBlank(message = "Bank name cannot be empty")
     private String bankName;
+
 }

@@ -26,6 +26,9 @@ public class UserCredential extends DBEntity {
     @Column(nullable = false, columnDefinition = "int default 0")
     private int loginAttempts;
 
+    @Column(nullable = false)
+    private String password;
+
     @Column()
     private String passwordHistory;
 

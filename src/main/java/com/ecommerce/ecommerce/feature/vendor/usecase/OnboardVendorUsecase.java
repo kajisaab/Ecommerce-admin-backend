@@ -18,12 +18,14 @@ import com.ecommerce.ecommerce.feature.vendor.repository.VendorSocialSettingRepo
 import com.ecommerce.ecommerce.feature.vendor.requestDto.OnboardVendorRequestDto;
 import com.ecommerce.ecommerce.feature.vendor.responseDto.OnboardVendorResponseDto;
 import com.ecommerce.ecommerce.feature.vendor.service.OnboardVendorService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class OnboardVendorUsecase implements OnboardVendorService {
 
@@ -89,7 +91,7 @@ public class OnboardVendorUsecase implements OnboardVendorService {
         );
     }
 
-    private VendorInfo mapToVendorInfo(OnboardVendorRequestDto dto) {
+    public VendorInfo mapToVendorInfo(OnboardVendorRequestDto dto) {
         // Mapping logic...
         String vendorName = dto.getVendorFirstName() + " " + dto.getVendorLastName();
 

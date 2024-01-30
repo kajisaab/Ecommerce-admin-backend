@@ -42,11 +42,12 @@ public class SignupUsecase {
         }
         boolean isUserAlreadyRegistered = isNewUser(request.getEmail());
         if(!isUserAlreadyRegistered){
-            var user = User.builder().firstName(request.getFirstName()).lastName(request.getLastName()).email(request.getEmail()).userName(request.getUserName()).role(RoleEnum.ADMIN).userType(UserTypeEnum.VENDOR).phoneNumber(request.getPhoneNumber()).password(passwordEncoder.encode((request.getPassword()))).build();
+            var user = User.builder().firstName(request.getFirstName()).lastName(request.getLastName()).email(request.getEmail()).userName(request.getUserName()).role(RoleEnum.ADMIN).userType(UserTypeEnum.VENDOR).phoneNumber(request.getPhoneNumber()).build();
             User savedUser = userDetailsRepository.save(user);
 
             UserCredential userCredential = new UserCredential();
             userCredential.setUserDetails(savedUser);
+            userCredential.setPassword(passwordEncoder.encode((request.getPassword())));
             UserCredential savedCred = userCredentialRepository.save(userCredential);
 
             GenerateOtpCodeDto generatedOtp = this.otpService.getOtp();

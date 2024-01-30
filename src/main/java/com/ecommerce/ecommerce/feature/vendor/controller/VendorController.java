@@ -47,7 +47,6 @@ public class VendorController {
 
     @PostMapping("/update/{id}")
     public ResponseEntity<Object>updateVendorDetails(@PathVariable(value = "id") String id, @RequestBody UpdateVendorRequestDto request) throws BadRequestException{
-        request.setId(id);
-        return ResponseHandler.responseBuilder("SUCCESSFULLY UPDATED", HttpStatus.OK, updateVendorDetailsService.updateVendor(request));
+        return ResponseHandler.responseBuilder("SUCCESSFULLY UPDATED", HttpStatus.OK, updateVendorDetailsService.updateVendor(request, id));
     }
 }

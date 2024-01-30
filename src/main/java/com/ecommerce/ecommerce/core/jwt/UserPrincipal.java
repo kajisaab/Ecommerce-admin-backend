@@ -1,6 +1,7 @@
 package com.ecommerce.ecommerce.core.jwt;
 
 import com.ecommerce.ecommerce.feature.auth.entity.User;
+import com.ecommerce.ecommerce.feature.auth.entity.UserCredential;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,13 +12,15 @@ import java.util.Collection;
 public class UserPrincipal implements UserDetails {
 
     private final User user;
+    private final UserCredential userCredential;
 
-    private UserPrincipal(User user) {
+    private UserPrincipal(User user, UserCredential userCredential) {
         this.user = user;
+        this.userCredential = userCredential;
     }
 
     public static UserPrincipal create(User user) {
-        return new UserPrincipal(user);
+        return new UserPrincipal(user, new UserCredential());
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -28,7 +31,7 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return userCredential.getPassword();
     }
 
     @Override

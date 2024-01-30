@@ -24,7 +24,9 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name= "userDetails")
+@Table(name= "userDetails", indexes = {
+        @Index(name = "email_index", columnList = "email")
+})
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -63,9 +65,6 @@ public class User implements UserDetails {
     @OneToOne(mappedBy = "userDetails", cascade = CascadeType.ALL)
     private UserCredential userCredential;
 
-    @Column(nullable = false)
-    private String password;
-
     @CreatedDate
     private LocalDateTime createdAt;
 
@@ -80,7 +79,7 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return password;
+        return null;
     }
 
     @Override

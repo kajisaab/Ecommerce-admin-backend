@@ -7,5 +7,5 @@ import com.ecommerce.ecommerce.feature.vendor.responseDto.UpdateVendorReponseDto
 
 public interface UpdateVendorDetailsService {
 
-    UpdateVendorReponseDto updateVendor(UpdateVendorRequestDto vendorDetailsRequest);
+    UpdateVendorReponseDto updateVendor(UpdateVendorRequestDto vendorDetailsRequest, String id);
 }
