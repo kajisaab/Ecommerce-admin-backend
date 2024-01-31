@@ -18,8 +18,6 @@ import lombok.NoArgsConstructor;
 @EntityListeners(AutoCloseable.class)
 @Entity
 public class VendorInfo extends DBEntity {
-    @Column(nullable = false)
-    private String vendorName;
 
     @Column(nullable = false)
     private String email;
@@ -53,5 +51,9 @@ public class VendorInfo extends DBEntity {
     @OneToOne(mappedBy = "vendorInfo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "vendor_id")
     private VendorBankDetail vendorBankDetail;
+
+    @OneToOne(mappedBy = "vendorInfo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "vendor_id")
+    private VendorAddress vendorAddress;
 
 }

@@ -4,11 +4,20 @@ import com.ecommerce.ecommerce.common.StatusEnum;
 import com.ecommerce.ecommerce.core.expception.BadRequestException;
 import com.ecommerce.ecommerce.core.validation.ValidationUtils;
 import com.ecommerce.ecommerce.email.EmailService;
+import com.ecommerce.ecommerce.feature.auth.entity.User;
+import com.ecommerce.ecommerce.feature.auth.entity.UserAddress;
+import com.ecommerce.ecommerce.feature.auth.entity.UserCredential;
+import com.ecommerce.ecommerce.feature.auth.enumConstant.RoleEnum;
+import com.ecommerce.ecommerce.feature.auth.enumConstant.UserTypeEnum;
+import com.ecommerce.ecommerce.feature.auth.repository.UserAddressRepository;
+import com.ecommerce.ecommerce.feature.auth.repository.UserCredentialRepository;
+import com.ecommerce.ecommerce.feature.auth.repository.UserDetailsRepository;
 import com.ecommerce.ecommerce.feature.auth.requestDto.SignupUsecaseRequestDto;
 import com.ecommerce.ecommerce.feature.auth.responseDto.SignupResponse;
 import com.ecommerce.ecommerce.feature.auth.service.GeneratePassword;
 import com.ecommerce.ecommerce.feature.auth.usecase.SignupUsecase;
 import com.ecommerce.ecommerce.feature.vendor.Constant.VendorTypeEnum;
+import com.ecommerce.ecommerce.feature.vendor.entity.VendorAddress;
 import com.ecommerce.ecommerce.feature.vendor.entity.VendorBankDetail;
 import com.ecommerce.ecommerce.feature.vendor.entity.VendorInfo;
 import com.ecommerce.ecommerce.feature.vendor.entity.VendorSocialSetting;
@@ -20,6 +29,7 @@ import com.ecommerce.ecommerce.feature.vendor.responseDto.OnboardVendorResponseD
 import com.ecommerce.ecommerce.feature.vendor.service.OnboardVendorService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -33,6 +43,10 @@ public class OnboardVendorUsecase implements OnboardVendorService {
     private final VendorSocialSettingRepository vendorSocialSettingRepository;
     private final VendorBankDetailsRepository vendorBankDetailsRepository;
     private final SignupUsecase signupUsecase;
+    private final UserDetailsRepository userDetailsRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final UserCredentialRepository userCredentialRepository;
+    private final UserAddressRepository userAddressRepository;
     private final EmailService emailService;
 
     @Override
@@ -42,7 +56,7 @@ public class OnboardVendorUsecase implements OnboardVendorService {
             throw new BadRequestException(violations);
         }
 
-        if(vendorDetailsRequest.getMunicipality() == null && vendorDetailsRequest.getRuralMunicipality() == null ){
+        if(vendorDetailsRequest.getVendor().getMunicipality() == null && vendorDetailsRequest.getVendor().getRuralMunicipality() == null ){
             throw new BadRequestException("Municipality or RuralMunicipality is required");
         }
 
@@ -62,65 +76,84 @@ public class OnboardVendorUsecase implements OnboardVendorService {
         vendorSocialSettingRepository.save(socialSetting);
 
         String vendorPassword = GeneratePassword.generate(9);
-        SignupUsecaseRequestDto signupRequestDto = getSignupUsecaseRequestDto(vendorDetailsRequest, vendorPassword);
 
-        SignupResponse response = this.signupUsecase.register(signupRequestDto);
+        boolean userAlreadyExist = this.signupUsecase.isNewUser(vendorDetailsRequest.getVendor().getVendorEmail());
 
-        if(response.getMessage().equals("Successfully Created user")){
-//            this.emailService.sendHtmlEmail();
-            System.out.println("Send the password to the email from here which is " + vendorPassword);
+        if(userAlreadyExist){
+            throw new BadRequestException("User With the " + vendorDetailsRequest.getVendor().getVendorEmail() + " already exist");
         }
+
+        User user = User.builder().firstName(vendorDetailsRequest.getUser().getFirstName()).lastName(vendorDetailsRequest.getUser().getLastName()).email(vendorDetailsRequest.getVendor().getVendorEmail()).userName(vendorDetailsRequest.getUser().getUserName()).role(RoleEnum.ADMIN).userType(UserTypeEnum.VENDOR).phoneNumber(vendorDetailsRequest.getUser().getContactNumber()).build();
+
+        User savedUser = userDetailsRepository.save(user);
+
+        UserCredential userCredential = new UserCredential();
+        userCredential.setUserDetails(savedUser);
+        userCredential.setPassword(passwordEncoder.encode((vendorPassword)));
+        UserCredential savedCred = userCredentialRepository.save(userCredential);
+
+        UserAddress userAddress = getUserAddress(vendorDetailsRequest, savedUser);
+        UserAddress userAddressDetails = userAddressRepository.save(userAddress);
+
+//        if(response.getMessage().equals("Successfully Created user")){
+////            this.emailService.sendHtmlEmail();
+//            System.out.println("Send the password to the email from here which is " + vendorPassword);
+//        }
 
         return new OnboardVendorResponseDto("Successfully Created Vendor");
     }
 
-    private SignupUsecaseRequestDto getSignupUsecaseRequestDto(OnboardVendorRequestDto vendorDetailsRequest, String vendorPassword) {
-        String userName;
-        if(vendorDetailsRequest.getVendorUserName() != null && !vendorDetailsRequest.getVendorUserName().isEmpty()) {
-            userName = vendorDetailsRequest.getVendorUserName();
-        }else {
-            userName = vendorDetailsRequest.getVendorFirstName() + " " + vendorDetailsRequest.getVendorLastName();
-        }
-        return new SignupUsecaseRequestDto(
-                vendorDetailsRequest.getVendorFirstName(),
-                vendorDetailsRequest.getVendorLastName(),
-                vendorDetailsRequest.getVendorEmail(),
-                vendorPassword,
-                userName,
-                vendorDetailsRequest.getContactNumber()
-        );
+    private static UserAddress getUserAddress(OnboardVendorRequestDto vendorDetailsRequest, User savedUser) {
+        UserAddress userAddress = new UserAddress();
+        userAddress.setState(vendorDetailsRequest.getUser().getState());
+        userAddress.setProvince(vendorDetailsRequest.getUser().getProvince());
+        userAddress.setWardNo(vendorDetailsRequest.getUser().getWardNo());
+        userAddress.setStreet(vendorDetailsRequest.getUser().getStreet());
+        userAddress.setMunicipality(vendorDetailsRequest.getUser().getMunicipality());
+        userAddress.setRuralMunicipality(vendorDetailsRequest.getUser().getRuralMunicipality());
+        userAddress.setZipCode(vendorDetailsRequest.getUser().getZipCode());
+        userAddress.setUserDetails(savedUser);
+        return userAddress;
     }
 
     public VendorInfo mapToVendorInfo(OnboardVendorRequestDto dto) {
         // Mapping logic...
-        String vendorName = dto.getVendorFirstName() + " " + dto.getVendorLastName();
 
         // setting the vendor Info details;
         VendorInfo vendorInfo = new VendorInfo();
-        vendorInfo.setVendorName(vendorName);
-        vendorInfo.setEmail(dto.getVendorEmail());
-        vendorInfo.setVendorBusinessName(dto.getVendorBusinessName());
-        vendorInfo.setContactNo(dto.getContactNumber());
+        vendorInfo.setEmail(dto.getVendor().getVendorEmail());
+        vendorInfo.setVendorBusinessName(dto.getVendor().getVendorBusinessName());
+        vendorInfo.setContactNo(dto.getVendor().getContactNumber());
         vendorInfo.setSlug("abc");
-        vendorInfo.setVendorType(VendorTypeEnum.fromDisplayName(dto.getVendorType()));
+        vendorInfo.setVendorType(VendorTypeEnum.fromDisplayName(dto.getVendor().getVendorType()));
         vendorInfo.setStatus(StatusEnum.PENDING);
-        vendorInfo.setImage("0232234-2323-2342323-234234"); // replace the hardcode value to dto.getImage();
+        vendorInfo.setImage(dto.getVendor().getImage()); // replace the hardcode value to dto.getImage();
 
         // setting the vendor bank details;
         VendorBankDetail vendorBankDetail = new VendorBankDetail();
-        vendorBankDetail.setBankName(dto.getBankName());
-        vendorBankDetail.setAccountHolder(dto.getAccountHolder());
-        vendorBankDetail.setAccountNumber(dto.getAccountNumber());
+        vendorBankDetail.setBankName(dto.getVendor().getBankName());
+        vendorBankDetail.setAccountHolder(dto.getVendor().getAccountHolder());
+        vendorBankDetail.setAccountNumber(dto.getVendor().getAccountNumber());
         vendorBankDetail.setVendorInfo(vendorInfo);
         vendorInfo.setVendorBankDetail(vendorBankDetail);
 
         // setting the vendor social setting
         VendorSocialSetting vendorSocialSetting = new VendorSocialSetting();
-        vendorSocialSetting.setFacebookUrl(dto.getFacebookUrl());
-        vendorSocialSetting.setInstagramUrl(dto.getInstagramUrl());
-        vendorSocialSetting.setTwitterUrl(dto.getTwitterUrl());
+        vendorSocialSetting.setFacebookUrl(dto.getVendor().getFacebookUrl());
+        vendorSocialSetting.setInstagramUrl(dto.getVendor().getInstagramUrl());
+        vendorSocialSetting.setTwitterUrl(dto.getVendor().getTwitterUrl());
         vendorSocialSetting.setVendorInfo(vendorInfo);
         vendorInfo.setVendorSocialSetting(vendorSocialSetting);
+
+        // setting the vendor address
+        VendorAddress vendorAddress = new VendorAddress();
+        vendorAddress.setState(dto.getVendor().getState());
+        vendorAddress.setProvince(dto.getVendor().getProvince());
+        vendorAddress.setWardNo(dto.getVendor().getWardNo());
+        vendorAddress.setStreet(dto.getVendor().getStreet());
+        vendorAddress.setMunicipality(dto.getVendor().getMunicipality());
+        vendorAddress.setRuralMunicipality(dto.getVendor().getRuralMunicipality());
+        vendorAddress.setZipCode(dto.getVendor().getZipCode());
 
         return vendorInfo;
     };

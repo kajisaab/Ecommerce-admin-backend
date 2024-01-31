@@ -9,6 +9,4 @@ import java.util.Optional;
 
 public interface VendorBankDetailsRepository extends JpaRepository<VendorBankDetail, String> {
 
-    @Query(value  = "SELECT * FROM vendor_bank_detail where vendor_id = :id", nativeQuery = true)
-    Optional<Map<String, Object>>getVendorbankDetailsBVendorId(String id);
 }

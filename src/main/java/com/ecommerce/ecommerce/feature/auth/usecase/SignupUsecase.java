@@ -60,7 +60,7 @@ public class SignupUsecase {
     }
 
 
-    private boolean isNewUser(String email){
+    public boolean isNewUser(String email){
         return userDetailsRepository.existsByEmail(email);
     }
 }
