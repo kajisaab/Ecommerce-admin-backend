@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -28,6 +29,7 @@ import java.util.List;
         @Index(name = "email_index", columnList = "email")
 })
 public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
@@ -79,7 +81,13 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        if (userCredential != null) {
+            System.out.println("This is the password from User dot java ======" + userCredential.getPassword());
+            return userCredential.getPassword();
+
+        }
+        return null; // or throw an exception if userCredential is null
+
     }
 
     @Override

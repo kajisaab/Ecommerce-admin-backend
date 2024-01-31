@@ -38,27 +38,21 @@ public class LoginUsecase {
             throw new BadRequestException(violations);
         }
         Optional<User> userDetails = userDetailsRepository.findByEmail(request.getEmail());
+
         AtomicReference<String> jwtToken = new AtomicReference<>("");
-        String userDefinedRole = RoleEnum.USER.getDisplayName();
+        String userDefinedRole;
 
         if (userDetails.isPresent()) {
             User user = userDetails.get();
-            String userId = user.getId();
+
             userDefinedRole = user.getRole().getDisplayName();
 
-            List<UserCredential> userCredentialDetails = userCredentialRepository.findByUserId(userId);
 
-            UserCredential userCredential = null;
-
-            if (!userCredentialDetails.isEmpty()) {
-                userCredential = userCredentialDetails.get(0);
-            }
-
-            if (userCredential != null && !passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
                 throw new BadRequestException("Invalid Credentials ");
             }
 
-            if(userCredential !=null && !user.isActive()){
+            if(!user.isActive()){
                 throw new BadRequestException("User is disabled");
             }
 

@@ -27,6 +27,8 @@ public class UpdateVendorRequestDto {
 
     private String image;
 
+    private String wardNo;
+
     @NotNull(message = "State cannot be null")
     @NotBlank(message = "State cannot be empty")
     private String state;
@@ -37,23 +39,9 @@ public class UpdateVendorRequestDto {
 
     private String ruralMunicipality;
 
-    @NotNull(message = "First name cannot be null")
-    @NotBlank(message = "First name cannot be empty")
-    private String vendorFirstName;
-
-    @NotNull(message = "Last name cannot be null")
-    @NotBlank(message = "Last name cannot be empty")
-    private String vendorLastName;
-
     @NotNull(message = "Business Name cannot be null")
     @NotBlank(message = "Business Name cannot be empty")
     private String vendorBusinessName;
-
-    @NotNull(message = "Vendor Email cannot be null")
-    @NotBlank(message = "Vendor Email cannot be empty")
-    private String vendorEmail;
-
-    private String vendorUserName;
 
     private String vendorType;
 

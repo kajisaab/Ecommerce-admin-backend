@@ -43,9 +43,10 @@ public class UserCredential extends DBEntity {
     @Override
     public String toString() {
         return "UserCredential{" +
-                ", max_login_attempts=" + maxLoginAttempts +
+                "max_login_attempts=" + maxLoginAttempts +
                 ", login_attempts=" + loginAttempts +
                 ", passwordHistory='" + passwordHistory + '\'' +
+                ", password='" + password +
                 '}';
     }
 }

@@ -60,6 +60,12 @@ public class OnboardVendorUsecase implements OnboardVendorService {
             throw new BadRequestException("Municipality or RuralMunicipality is required");
         }
 
+        boolean userAlreadyExist = this.signupUsecase.isNewUser(vendorDetailsRequest.getVendor().getVendorEmail());
+
+        if(userAlreadyExist){
+            throw new BadRequestException("User With the " + vendorDetailsRequest.getVendor().getVendorEmail() + " already exist");
+        }
+
         // Map the Dto to the entities
         VendorInfo vendorInfo = mapToVendorInfo(vendorDetailsRequest);
 
@@ -77,12 +83,6 @@ public class OnboardVendorUsecase implements OnboardVendorService {
 
         String vendorPassword = GeneratePassword.generate(9);
 
-        boolean userAlreadyExist = this.signupUsecase.isNewUser(vendorDetailsRequest.getVendor().getVendorEmail());
-
-        if(userAlreadyExist){
-            throw new BadRequestException("User With the " + vendorDetailsRequest.getVendor().getVendorEmail() + " already exist");
-        }
-
         User user = User.builder().firstName(vendorDetailsRequest.getUser().getFirstName()).lastName(vendorDetailsRequest.getUser().getLastName()).email(vendorDetailsRequest.getVendor().getVendorEmail()).userName(vendorDetailsRequest.getUser().getUserName()).role(RoleEnum.ADMIN).userType(UserTypeEnum.VENDOR).phoneNumber(vendorDetailsRequest.getUser().getContactNumber()).build();
 
         User savedUser = userDetailsRepository.save(user);
@@ -94,6 +94,8 @@ public class OnboardVendorUsecase implements OnboardVendorService {
 
         UserAddress userAddress = getUserAddress(vendorDetailsRequest, savedUser);
         UserAddress userAddressDetails = userAddressRepository.save(userAddress);
+
+        System.out.println("Onboarding happening " );
 
 //        if(response.getMessage().equals("Successfully Created user")){
 ////            this.emailService.sendHtmlEmail();
