@@ -65,9 +65,9 @@ public class OnboardVendorUsecase implements OnboardVendorService {
         this.signupUsecase.isNewUser(vendorDetailsRequest.getVendor().getVendorEmail(), vendorDetailsRequest.getUser().getContactNumber());
 
         // Map the Dto to the entities
-        VendorInfo vendorInfo = mapToVendorInfo(vendorDetailsRequest);
+        VendorInfo vendorInfoDTO = mapToVendorInfo(vendorDetailsRequest);
 
-        vendorInfoRepository.save(vendorInfo);
+        VendorInfo vendorInfo = vendorInfoRepository.save(vendorInfoDTO);
 
         // VendorBankDetail
         VendorBankDetail bankDetail = vendorInfo.getVendorBankDetail();
@@ -79,10 +79,10 @@ public class OnboardVendorUsecase implements OnboardVendorService {
         socialSetting.setVendorInfo(vendorInfo);
         vendorSocialSettingRepository.save(socialSetting);
 
-        // Save Vendor Address
-//        VendorAddress vendorAddress = vendorInfo.getVendorAddress();
-//        vendorAddress.setVendorInfo(vendorInfo);
-//        vendorAddressRepository.save(vendorAddress);
+//         Save Vendor Address
+        VendorAddress vendorAddress = vendorInfo.getVendorAddress();
+        vendorAddress.setVendorInfo(vendorInfo);
+        vendorAddressRepository.save(vendorAddress);
 
 
         String vendorPassword = GeneratePassword.generate(9);
@@ -94,10 +94,10 @@ public class OnboardVendorUsecase implements OnboardVendorService {
         UserCredential userCredential = new UserCredential();
         userCredential.setUserDetails(savedUser);
         userCredential.setPassword(passwordEncoder.encode((vendorPassword)));
-        UserCredential savedCred = userCredentialRepository.save(userCredential);
+        userCredentialRepository.save(userCredential);
 
         UserAddress userAddress = getUserAddress(vendorDetailsRequest, savedUser);
-        UserAddress userAddressDetails = userAddressRepository.save(userAddress);
+        userAddressRepository.save(userAddress);
 
         System.out.println("Onboarding happening " );
 
@@ -152,13 +152,6 @@ public class OnboardVendorUsecase implements OnboardVendorService {
         vendorInfo.setVendorSocialSetting(vendorSocialSetting);
 
         // setting the vendor address
-        VendorAddress vendorAddress = getVendorAddress(dto);
-        vendorInfo.setVendorAddress(vendorAddress);
-
-        return vendorInfo;
-    }
-
-    private static VendorAddress getVendorAddress(OnboardVendorRequestDto dto) {
         VendorAddress vendorAddress = new VendorAddress();
         vendorAddress.setState(dto.getVendor().getState());
         vendorAddress.setProvince(dto.getVendor().getProvince());
@@ -167,8 +160,9 @@ public class OnboardVendorUsecase implements OnboardVendorService {
         vendorAddress.setMunicipality(dto.getVendor().getMunicipality());
         vendorAddress.setRuralMunicipality(dto.getVendor().getRuralMunicipality());
         vendorAddress.setZipCode(dto.getVendor().getZipCode());
-        return vendorAddress;
-    }
+        vendorAddress.setVendorInfo(vendorInfo);
+        vendorInfo.setVendorAddress(vendorAddress);
 
-    ;
+        return vendorInfo;
+    }
 }

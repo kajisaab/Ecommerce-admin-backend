@@ -45,14 +45,6 @@ public class VendorRequestDto {
 
     private String ruralMunicipality;
 
-    @NotNull(message = "First name cannot be null")
-    @NotBlank(message = "First name cannot be empty")
-    private String vendorFirstName;
-
-    @NotNull(message = "Last name cannot be null")
-    @NotBlank(message = "Last name cannot be empty")
-    private String vendorLastName;
-
     @NotNull(message = "Business Name cannot be null")
     @NotBlank(message = "Business Name cannot be empty")
     private String vendorBusinessName;

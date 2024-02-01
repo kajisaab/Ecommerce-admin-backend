@@ -30,7 +30,6 @@ public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
 
-    // This is for the Rest API
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http
@@ -61,26 +60,6 @@ public class SecurityConfiguration {
         };
     }
 
-
-
-
-    // This is for the thymeleaf
-//    @Bean
-//    @Order(2)
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-//        http
-//                .csrf(AbstractHttpConfigurer::disable)
-//                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/login").permitAll()
-//                        .requestMatchers("/error").permitAll()
-//                        .requestMatchers("/css/**", "/js/**").permitAll()
-//                        .anyRequest().authenticated()
-//                )
-//                .authenticationProvider(authenticationProvider)
-//                .formLogin(login -> login.loginPage("/login").loginProcessingUrl("/login").failureHandler(customAuthenticationFailureHandler()).defaultSuccessUrl("/dashboardPage").permitAll())
-//                .logout(logout -> logout.clearAuthentication(true).invalidateHttpSession(true).logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login").permitAll());
-//        return http.build();
-//    }
     @Bean
     CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
