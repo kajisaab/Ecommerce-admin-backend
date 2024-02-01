@@ -23,7 +23,7 @@ public class GetIndividualVendorDetailsService implements GetIndividualVendorDet
         if(!vendorData.isEmpty()){
              var vendorDetails = new IndividualVendorDetailsResopnseDto();
              vendorDetails.vendorId = (String) vendorData.get("vendor_id");
-             vendorDetails.vendorName = (String) vendorData.get("vendor_name");
+             vendorDetails.businessName = (String) vendorData.get("vendor_business_name");
              vendorDetails.contactNo = (String) vendorData.get("contact_no");
              vendorDetails.email = (String) vendorData.get("email");
              vendorDetails.street = (String) vendorData.get("street");

@@ -35,7 +35,7 @@ public class GetAllVendorListServiceUsecase implements GetAllVendorListService {
 
     private VendorListDto toListDto(Map<String, Object> result) {
         VendorListDto vendor = new VendorListDto();
-        vendor.setVendorName((String) result.get("vendor_name"));
+        vendor.setBusinessName((String) result.get("vendor_business_name"));
         vendor.setVendorId((String) result.get("vendor_id"));
         vendor.setContactNo((String) result.get("contact_no"));
         vendor.setImage((String) result.get("image"));

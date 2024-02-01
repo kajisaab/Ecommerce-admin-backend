@@ -35,32 +35,37 @@ public class SignupUsecase {
     private final OtpService otpService;
     private final EmailServiceImpl emailService;
 
-    public SignupResponse register(@RequestBody SignupUsecaseRequestDto request){
+    public SignupResponse register(@RequestBody SignupUsecaseRequestDto request) {
         String violations = ValidationUtils.validate(request);
-        if(!Objects.isNull(violations)){
+        if (!Objects.isNull(violations)) {
             throw new BadRequestException(violations);
         }
-        boolean isUserAlreadyRegistered = isNewUser(request.getEmail());
-        if(!isUserAlreadyRegistered){
-            var user = User.builder().firstName(request.getFirstName()).lastName(request.getLastName()).email(request.getEmail()).userName(request.getUserName()).role(RoleEnum.ADMIN).userType(UserTypeEnum.VENDOR).phoneNumber(request.getPhoneNumber()).build();
-            User savedUser = userDetailsRepository.save(user);
+        isNewUser(request.getEmail(), request.getPhoneNumber());
 
-            UserCredential userCredential = new UserCredential();
-            userCredential.setUserDetails(savedUser);
-            userCredential.setPassword(passwordEncoder.encode((request.getPassword())));
-            UserCredential savedCred = userCredentialRepository.save(userCredential);
+        var user = User.builder().firstName(request.getFirstName()).lastName(request.getLastName()).email(request.getEmail()).userName(request.getUserName()).role(RoleEnum.ADMIN).userType(UserTypeEnum.VENDOR).phoneNumber(request.getPhoneNumber()).build();
+        User savedUser = userDetailsRepository.save(user);
 
-            GenerateOtpCodeDto generatedOtp = this.otpService.getOtp();
-            var otpDetails = OtpSetting.builder().userCredential(savedCred).otp(generatedOtp.getOtpCode()).expiry_date_time(generatedOtp.getExpiryTime()).build();
-            otpSettingRepository.save(otpDetails);
+        UserCredential userCredential = new UserCredential();
+        userCredential.setUserDetails(savedUser);
+        userCredential.setPassword(passwordEncoder.encode((request.getPassword())));
+        UserCredential savedCred = userCredentialRepository.save(userCredential);
+
+        GenerateOtpCodeDto generatedOtp = this.otpService.getOtp();
+        var otpDetails = OtpSetting.builder().userCredential(savedCred).otp(generatedOtp.getOtpCode()).expiry_date_time(generatedOtp.getExpiryTime()).build();
+        otpSettingRepository.save(otpDetails);
 //            emailService.sendHtmlEmail(generatedOtp.getOtpCode(), request.getEmail());
-            return SignupResponse.builder().message("Successfully Created user").build();
-        }
-        throw new BadRequestException("User with the email " + request.getEmail() + " already exists");
+        return SignupResponse.builder().message("Successfully Created user").build();
     }
 
 
-    public boolean isNewUser(String email){
-        return userDetailsRepository.existsByEmail(email);
+    public void isNewUser(String email, String phone) {
+        if(userDetailsRepository.existsByEmail(email)){
+            throw new BadRequestException("User with the email " + email + " already exists");
+        };
+
+        if(userDetailsRepository.existsByPhoneNumber(phone) == 1){
+            throw new BadRequestException("User with " + phone + " Phone Number already exists");
+        }
+
     }
 }

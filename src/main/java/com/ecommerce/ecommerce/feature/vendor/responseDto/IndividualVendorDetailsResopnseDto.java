@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class IndividualVendorDetailsResopnseDto {
     public String vendorId;
-    public String vendorName;
+    public String businessName;
     public String contactNo;
     public String email;
     public String street;

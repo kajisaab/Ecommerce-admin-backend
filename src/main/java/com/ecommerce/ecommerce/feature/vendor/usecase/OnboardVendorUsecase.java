@@ -21,6 +21,7 @@ import com.ecommerce.ecommerce.feature.vendor.entity.VendorAddress;
 import com.ecommerce.ecommerce.feature.vendor.entity.VendorBankDetail;
 import com.ecommerce.ecommerce.feature.vendor.entity.VendorInfo;
 import com.ecommerce.ecommerce.feature.vendor.entity.VendorSocialSetting;
+import com.ecommerce.ecommerce.feature.vendor.repository.VendorAddressRepository;
 import com.ecommerce.ecommerce.feature.vendor.repository.VendorBankDetailsRepository;
 import com.ecommerce.ecommerce.feature.vendor.repository.VendorInfoRepository;
 import com.ecommerce.ecommerce.feature.vendor.repository.VendorSocialSettingRepository;
@@ -47,6 +48,7 @@ public class OnboardVendorUsecase implements OnboardVendorService {
     private final PasswordEncoder passwordEncoder;
     private final UserCredentialRepository userCredentialRepository;
     private final UserAddressRepository userAddressRepository;
+    private final VendorAddressRepository vendorAddressRepository;
     private final EmailService emailService;
 
     @Override
@@ -60,11 +62,7 @@ public class OnboardVendorUsecase implements OnboardVendorService {
             throw new BadRequestException("Municipality or RuralMunicipality is required");
         }
 
-        boolean userAlreadyExist = this.signupUsecase.isNewUser(vendorDetailsRequest.getVendor().getVendorEmail());
-
-        if(userAlreadyExist){
-            throw new BadRequestException("User With the " + vendorDetailsRequest.getVendor().getVendorEmail() + " already exist");
-        }
+        this.signupUsecase.isNewUser(vendorDetailsRequest.getVendor().getVendorEmail(), vendorDetailsRequest.getUser().getContactNumber());
 
         // Map the Dto to the entities
         VendorInfo vendorInfo = mapToVendorInfo(vendorDetailsRequest);
@@ -80,6 +78,12 @@ public class OnboardVendorUsecase implements OnboardVendorService {
         VendorSocialSetting socialSetting = vendorInfo.getVendorSocialSetting();
         socialSetting.setVendorInfo(vendorInfo);
         vendorSocialSettingRepository.save(socialSetting);
+
+        // Save Vendor Address
+//        VendorAddress vendorAddress = vendorInfo.getVendorAddress();
+//        vendorAddress.setVendorInfo(vendorInfo);
+//        vendorAddressRepository.save(vendorAddress);
+
 
         String vendorPassword = GeneratePassword.generate(9);
 
@@ -148,6 +152,13 @@ public class OnboardVendorUsecase implements OnboardVendorService {
         vendorInfo.setVendorSocialSetting(vendorSocialSetting);
 
         // setting the vendor address
+        VendorAddress vendorAddress = getVendorAddress(dto);
+        vendorInfo.setVendorAddress(vendorAddress);
+
+        return vendorInfo;
+    }
+
+    private static VendorAddress getVendorAddress(OnboardVendorRequestDto dto) {
         VendorAddress vendorAddress = new VendorAddress();
         vendorAddress.setState(dto.getVendor().getState());
         vendorAddress.setProvince(dto.getVendor().getProvince());
@@ -156,7 +167,8 @@ public class OnboardVendorUsecase implements OnboardVendorService {
         vendorAddress.setMunicipality(dto.getVendor().getMunicipality());
         vendorAddress.setRuralMunicipality(dto.getVendor().getRuralMunicipality());
         vendorAddress.setZipCode(dto.getVendor().getZipCode());
+        return vendorAddress;
+    }
 
-        return vendorInfo;
-    };
+    ;
 }
