@@ -41,7 +41,7 @@ public class UpdateVendorRequestDto {
 
     @NotNull(message = "Business Name cannot be null")
     @NotBlank(message = "Business Name cannot be empty")
-    private String vendorBusinessName;
+    private String businessName;
 
     private String vendorType;
 

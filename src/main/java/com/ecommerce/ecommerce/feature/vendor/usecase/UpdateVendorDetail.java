@@ -37,7 +37,7 @@ public class UpdateVendorDetail implements UpdateVendorDetailsService {
 
         // update VendorInfo entity
         vendorInfo.setContactNo(request.getContactNumber());
-        vendorInfo.setVendorBusinessName(request.getVendorBusinessName());
+        vendorInfo.setVendorBusinessName(request.getBusinessName());
         vendorInfo.setVendorType(VendorTypeEnum.fromDisplayName(request.getVendorType()));
         vendorInfo.setImage(request.getImage());
 

@@ -21,10 +21,11 @@ public interface VendorInfoRepository extends JpaRepository<VendorInfo, String> 
             nativeQuery = true)
     Page<Map<String, Object>> getAllVendor(@Param("keyword") String keyword, Pageable pageable);
 
-    @Query(value = "SELECT vi.id AS vendor_id, vi.vendor_business_name, vi.contact_no, vi.slug, vi.vendor_type, vi.status, vi.email, vi.image, vb.bank_name, vb.account_holder, vb.account_number, vss.facebook_url, twitter_url, instagram_url " +
+    @Query(value = "SELECT vi.id AS vendor_id, vi.vendor_business_name, vi.contact_no, vi.slug, vi.vendor_type, vi.status, vi.email, vi.image, vb.bank_name, vb.account_holder, vb.account_number, vss.facebook_url, vss.twitter_url, vss.instagram_url, va.municipality, va.province, va.rural_municipality, va.state, va.street, va.ward_no, va.zip_code " +
             "FROM vendor_info vi " +
             "LEFT JOIN vendor_bank_detail vb ON vi.id = vb.vendor_id " +
-            "LEFT JOIN vendor_social_setting vss on vi.id = vss.vendor_id" +
+            "LEFT JOIN vendor_social_setting vss on vi.id = vss.vendor_id " +
+            "LEFT JOIN vendor_address va on vi.id = va.vendor_id" +
             " WHERE vi.id = :id ", nativeQuery = true
     )
     Map<String, Object> getIndividualVendor(@Param(value = "id") String id);
