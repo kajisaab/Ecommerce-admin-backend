@@ -19,6 +19,9 @@ public class UserAddress extends DBEntity {
     private String state;
 
     @Column()
+    private String country;
+
+    @Column()
     private String province;
 
     @Column()

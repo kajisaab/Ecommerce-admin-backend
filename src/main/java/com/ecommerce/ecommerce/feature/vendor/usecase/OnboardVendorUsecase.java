@@ -99,7 +99,6 @@ public class OnboardVendorUsecase implements OnboardVendorService {
         UserAddress userAddress = getUserAddress(vendorDetailsRequest, savedUser);
         userAddressRepository.save(userAddress);
 
-        System.out.println("Onboarding happening " );
 
 //        if(response.getMessage().equals("Successfully Created user")){
 ////            this.emailService.sendHtmlEmail();

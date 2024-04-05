@@ -32,7 +32,6 @@ public class EmailServiceImpl implements EmailService {
     @Async
     public void sendSimpleEmail(String to) {
         try {
-            System.out.println("This is the host and username =====> " + host + " and " + fromEmail);
             SimpleMailMessage mailMessage = new SimpleMailMessage();
             mailMessage.setSubject("OTP Verification");
             mailMessage.setFrom(fromEmail);
@@ -83,7 +82,6 @@ public class EmailServiceImpl implements EmailService {
             helper.setTo(to);
             helper.setText(text, true);
             emailSender.send(mailMessage);
-            System.out.println("Successfully send the email with Otpcode of " + otpCode + " to the email " + to);
         }catch(Exception e){
             System.out.println(e.getMessage());
             throw new RuntimeException(e);

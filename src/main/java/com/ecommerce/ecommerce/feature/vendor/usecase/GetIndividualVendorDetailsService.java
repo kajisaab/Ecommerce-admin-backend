@@ -29,6 +29,8 @@ public class GetIndividualVendorDetailsService implements GetIndividualVendorDet
              vendorDetails.street = (String) vendorData.get("street");
              vendorDetails.district = (String) vendorData.get("district");
              vendorDetails.state = (String) vendorData.get("state");
+             vendorDetails.municipality = (String) vendorData.get("municipality");
+             vendorDetails.ruralMunicipality = (String) vendorData.get("rural_municipality");
              vendorDetails.country = (String) vendorData.get("country");
              vendorDetails.zipCode = (String) vendorData.get("zip_code");
              vendorDetails.vendorType = VendorTypeEnum.valueOf((String) vendorData.get("vendor_type")).getDisplayName(); // This is the way to convert the enum to the display Name

@@ -38,6 +38,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/register", "/auth/signin").permitAll()
                         .requestMatchers("/vendor/**").hasAuthority("SUPER_ADMIN")
+                        .requestMatchers("/product/save", "/product/update/**", "/product/delete/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptionHandling ->

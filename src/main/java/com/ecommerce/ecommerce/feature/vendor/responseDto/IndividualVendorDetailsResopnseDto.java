@@ -19,6 +19,8 @@ public class IndividualVendorDetailsResopnseDto {
     public String state;
     public String country;
     public String zipCode;
+    public String municipality;
+    public String ruralMunicipality;
     public String vendorType;
     public String status;
     public String image;

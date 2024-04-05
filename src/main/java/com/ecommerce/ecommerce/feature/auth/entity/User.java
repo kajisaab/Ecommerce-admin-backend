@@ -68,6 +68,9 @@ public class User implements UserDetails {
     @OneToOne(mappedBy = "userDetails", cascade = CascadeType.ALL)
     private UserCredential userCredential;
 
+    @Column()
+    private String refreshToken;
+
     @CreatedDate
     private LocalDateTime createdAt;
 
@@ -85,7 +88,6 @@ public class User implements UserDetails {
     @Override
     public String getPassword() {
         if (userCredential != null) {
-            System.out.println("This is the password from User dot java ======" + userCredential.getPassword());
             return userCredential.getPassword();
 
         }

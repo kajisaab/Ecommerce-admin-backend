@@ -33,6 +33,5 @@ public class GeneratePassword {
     public static void main(String[] args) {
         int length = 8;
         String password = GeneratePassword.generate(length);
-        System.out.println("Random Password: " + password);
     }
 }

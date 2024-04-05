@@ -34,7 +34,6 @@ public class AuthHandlerInterceptor implements HandlerInterceptor {
             if(userEmail != null){
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
                 if(jwtService.isTokenValid(jwt, userDetails)) {
-                    System.out.println("here hitting");
                     jwtToken.set(jwtService.generateToken(userDetails));
                     response.setHeader("X-XSRF-TOKEN", jwtToken.get());
                 }

@@ -18,6 +18,9 @@ import lombok.NoArgsConstructor;
 public class VendorAddress extends DBEntity {
 
     @Column()
+    private String country;
+
+    @Column()
     private String state;
 
     @Column()
